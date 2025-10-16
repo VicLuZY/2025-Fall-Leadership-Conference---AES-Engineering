@@ -30,9 +30,6 @@ function initializeApp() {
     
     // Load saved notes
     loadNotes();
-    
-    // Setup carousel functionality
-    setupCarousel();
 }
 
 // Tab Navigation
@@ -544,107 +541,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// Carousel Functionality
-function setupCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const indicators = document.querySelectorAll('.indicator');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    let currentSlide = 0;
-    
-    // Update slide visibility and indicators
-    function updateSlide(index) {
-        // Remove active class from all slides and indicators
-        slides.forEach(slide => slide.classList.remove('active'));
-        indicators.forEach(indicator => indicator.classList.remove('active'));
-        
-        // Add active class to current slide and indicator
-        if (slides[index]) {
-            slides[index].classList.add('active');
-        }
-        if (indicators[index]) {
-            indicators[index].classList.add('active');
-        }
-        
-        // Update button states
-        if (prevBtn && nextBtn) {
-            prevBtn.disabled = index === 0;
-            nextBtn.disabled = index === slides.length - 1;
-        }
-        
-        currentSlide = index;
-    }
-    
-    // Next slide
-    function nextSlide() {
-        if (currentSlide < slides.length - 1) {
-            updateSlide(currentSlide + 1);
-        }
-    }
-    
-    // Previous slide
-    function prevSlide() {
-        if (currentSlide > 0) {
-            updateSlide(currentSlide - 1);
-        }
-    }
-    
-    // Setup event listeners
-    if (prevBtn) {
-        prevBtn.addEventListener('click', prevSlide);
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', nextSlide);
-    }
-    
-    // Setup indicator clicks
-    indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => updateSlide(index));
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            prevSlide();
-        } else if (e.key === 'ArrowRight') {
-            nextSlide();
-        }
-    });
-    
-    // Initialize
-    updateSlide(0);
-    
-    // Auto-advance carousel (optional - can be disabled)
-    let autoAdvanceInterval;
-    
-    function startAutoAdvance() {
-        autoAdvanceInterval = setInterval(() => {
-            if (currentSlide < slides.length - 1) {
-                nextSlide();
-            } else {
-                updateSlide(0); // Loop back to start
-            }
-        }, 10000); // 10 seconds
-    }
-    
-    function stopAutoAdvance() {
-        if (autoAdvanceInterval) {
-            clearInterval(autoAdvanceInterval);
-        }
-    }
-    
-    // Start auto-advance on mouse leave, stop on mouse enter
-    const carouselContainer = document.querySelector('.carousel-container');
-    if (carouselContainer) {
-        carouselContainer.addEventListener('mouseenter', stopAutoAdvance);
-        carouselContainer.addEventListener('mouseleave', startAutoAdvance);
-        
-        // Start auto-advance initially
-        startAutoAdvance();
-    }
-}
 
 // Utility Functions
 function addToCalendar(eventData) {
