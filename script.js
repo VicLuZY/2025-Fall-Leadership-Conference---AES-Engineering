@@ -24,6 +24,12 @@ function initializeApp() {
     
     // Setup responsive features
     setupResponsiveFeatures();
+    
+    // Setup attendee features
+    setupAttendeeFeatures();
+    
+    // Load saved notes
+    loadNotes();
 }
 
 // Tab Navigation
@@ -296,6 +302,245 @@ function setupResponsiveFeatures() {
         document.body.appendChild(navToggle);
     }
 }
+
+// Attendee Features
+function setupAttendeeFeatures() {
+    // Setup favorites functionality
+    setupFavorites();
+    
+    // Setup notes functionality
+    setupNotes();
+    
+    // Setup material downloads
+    setupMaterialDownloads();
+    
+    // Setup my schedule section
+    setupMySchedule();
+}
+
+function setupFavorites() {
+    const favoriteButtons = document.querySelectorAll('.favorite-btn');
+    
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const timeSlot = this.closest('.time-slot');
+            const sessionTitle = timeSlot.querySelector('h3').textContent;
+            
+            if (this.classList.contains('favorited')) {
+                // Remove from favorites
+                this.classList.remove('favorited');
+                this.innerHTML = '<i class="fas fa-star"></i>';
+                removeFromFavorites(sessionTitle);
+            } else {
+                // Add to favorites
+                this.classList.add('favorited');
+                this.innerHTML = '<i class="fas fa-star"></i>';
+                addToFavorites(sessionTitle, timeSlot);
+            }
+        });
+    });
+}
+
+function setupNotes() {
+    const notesButtons = document.querySelectorAll('.notes-btn');
+    
+    notesButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const timeSlot = this.closest('.time-slot');
+            const notesSection = timeSlot.querySelector('.session-notes');
+            
+            if (notesSection.style.display === 'none') {
+                notesSection.style.display = 'block';
+                this.innerHTML = '<i class="fas fa-sticky-note"></i>';
+                this.style.background = 'var(--aes-green)';
+                this.style.color = 'white';
+            } else {
+                notesSection.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-sticky-note"></i>';
+                this.style.background = 'transparent';
+                this.style.color = 'var(--aes-blue)';
+            }
+        });
+    });
+    
+    // Setup save notes functionality
+    const saveButtons = document.querySelectorAll('.save-notes-btn');
+    saveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const textarea = this.previousElementSibling;
+            const sessionTitle = this.closest('.time-slot').querySelector('h3').textContent;
+            saveNotes(sessionTitle, textarea.value);
+            
+            // Show confirmation
+            const originalText = this.textContent;
+            this.textContent = 'Saved!';
+            this.style.background = 'var(--aes-green)';
+            setTimeout(() => {
+                this.textContent = originalText;
+                this.style.background = 'var(--aes-dark-blue)';
+            }, 2000);
+        });
+    });
+}
+
+function setupMaterialDownloads() {
+    const materialLinks = document.querySelectorAll('.material-link');
+    
+    materialLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const fileName = this.textContent.trim();
+            
+            // Simulate download
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-download"></i> Downloading...';
+            this.style.color = 'var(--aes-green)';
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.style.color = 'var(--aes-blue)';
+                
+                // Show download notification
+                showNotification(`${fileName} downloaded successfully!`);
+            }, 1500);
+        });
+    });
+}
+
+function setupMySchedule() {
+    // Create my schedule section
+    const overviewTab = document.getElementById('overview');
+    const myScheduleSection = document.createElement('section');
+    myScheduleSection.className = 'section my-schedule';
+    myScheduleSection.innerHTML = `
+        <h3><i class="fas fa-heart"></i> My Schedule</h3>
+        <p>Your favorite sessions and personal notes</p>
+        <div id="favorite-sessions-list">
+            <p class="no-favorites">No favorite sessions yet. Click the star icon on any session to add it to your schedule.</p>
+        </div>
+    `;
+    
+    overviewTab.appendChild(myScheduleSection);
+}
+
+function addToFavorites(sessionTitle, timeSlot) {
+    const favoritesList = document.getElementById('favorite-sessions-list');
+    const noFavoritesMsg = favoritesList.querySelector('.no-favorites');
+    
+    if (noFavoritesMsg) {
+        noFavoritesMsg.remove();
+    }
+    
+    // Check if already exists
+    const existingItem = favoritesList.querySelector(`[data-session="${sessionTitle}"]`);
+    if (existingItem) return;
+    
+    const sessionTime = timeSlot.querySelector('.time').textContent;
+    const favoriteItem = document.createElement('li');
+    favoriteItem.innerHTML = `
+        <div>
+            <div class="session-time">${sessionTime}</div>
+            <div>${sessionTitle}</div>
+        </div>
+        <button class="remove-favorite-btn" title="Remove from Favorites">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    favoriteItem.setAttribute('data-session', sessionTitle);
+    
+    // Add remove functionality
+    const removeBtn = favoriteItem.querySelector('.remove-favorite-btn');
+    removeBtn.addEventListener('click', function() {
+        favoriteItem.remove();
+        removeFromFavorites(sessionTitle);
+        
+        // Show no favorites message if list is empty
+        if (favoritesList.children.length === 0) {
+            favoritesList.innerHTML = '<p class="no-favorites">No favorite sessions yet. Click the star icon on any session to add it to your schedule.</p>';
+        }
+    });
+    
+    favoritesList.appendChild(favoriteItem);
+    showNotification(`${sessionTitle} added to your schedule!`);
+}
+
+function removeFromFavorites(sessionTitle) {
+    // Update the star button in the original session
+    const timeSlot = document.querySelector(`[data-session]`);
+    if (timeSlot) {
+        const favoriteBtn = timeSlot.querySelector('.favorite-btn');
+        if (favoriteBtn) {
+            favoriteBtn.classList.remove('favorited');
+            favoriteBtn.innerHTML = '<i class="fas fa-star"></i>';
+        }
+    }
+    
+    showNotification(`${sessionTitle} removed from your schedule`);
+}
+
+function saveNotes(sessionTitle, notes) {
+    // Save to localStorage
+    const savedNotes = JSON.parse(localStorage.getItem('conferenceNotes') || '{}');
+    savedNotes[sessionTitle] = notes;
+    localStorage.setItem('conferenceNotes', JSON.stringify(savedNotes));
+}
+
+function loadNotes() {
+    const savedNotes = JSON.parse(localStorage.getItem('conferenceNotes') || '{}');
+    
+    Object.keys(savedNotes).forEach(sessionTitle => {
+        const timeSlot = document.querySelector(`[data-session]`);
+        if (timeSlot) {
+            const notesTextarea = timeSlot.querySelector('.session-notes textarea');
+            if (notesTextarea) {
+                notesTextarea.value = savedNotes[sessionTitle];
+            }
+        }
+    });
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--aes-green);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 10000;
+        font-family: var(--font-primary);
+        font-size: 14px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
 
 // Utility Functions
 function addToCalendar(eventData) {
