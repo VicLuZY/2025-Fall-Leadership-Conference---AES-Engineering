@@ -227,6 +227,7 @@ body {
     cursor: pointer;
     border: 2px solid transparent;
     position: relative;
+    display: block;
 }
 
 .flashcard:hover {

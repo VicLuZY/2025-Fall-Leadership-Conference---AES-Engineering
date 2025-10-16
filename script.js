@@ -372,6 +372,7 @@ class ConferenceApp {
             this.setupEventListeners();
             this.loadPersistedData();
             this.setupAnimations();
+            this.ensureCardsVisible();
             this.showWelcomeMessage();
         } catch (error) {
             console.error('Failed to initialize application:', error);
@@ -737,6 +738,12 @@ class ConferenceApp {
     }
     
     searchAgenda(searchTerm) {
+        // Only perform search if there's an actual search term
+        if (!searchTerm || searchTerm.trim() === '') {
+            this.clearSearch();
+            return;
+        }
+        
         const searchableElements = document.querySelectorAll('.flashcard');
         let matchCount = 0;
         
@@ -750,27 +757,24 @@ class ConferenceApp {
                 card.style.display = 'block';
             } else {
                 card.classList.remove('search-highlight');
-                if (searchTerm) {
-                    card.style.display = 'none';
-                } else {
-                    card.style.display = 'block';
-                }
+                card.style.display = 'none';
             }
         });
         
         // Show search results count
-        if (searchTerm) {
-            this.showSearchResults(matchCount);
-        } else {
-            this.clearSearch();
-        }
+        this.showSearchResults(matchCount);
     }
     
     clearSearch() {
         const highlightedElements = document.querySelectorAll('.search-highlight');
         highlightedElements.forEach(element => {
             element.classList.remove('search-highlight');
-            element.style.display = 'block';
+        });
+        
+        // Ensure all flashcards are visible
+        const allCards = document.querySelectorAll('.flashcard');
+        allCards.forEach(card => {
+            card.style.display = 'block';
         });
     }
     
@@ -793,6 +797,20 @@ class ConferenceApp {
         // Refresh AOS if available
         if (typeof AOS !== 'undefined') {
             AOS.refresh();
+        }
+    }
+    
+    // Ensure all cards are visible on initialization
+    ensureCardsVisible() {
+        const allCards = document.querySelectorAll('.flashcard');
+        allCards.forEach(card => {
+            card.style.display = 'block';
+            card.classList.remove('search-highlight');
+        });
+        
+        // Clear any search input
+        if (this.searchInput) {
+            this.searchInput.value = '';
         }
     }
     
