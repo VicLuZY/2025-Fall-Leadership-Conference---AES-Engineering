@@ -794,7 +794,7 @@ body {
     border-left-color: var(--aes-blue);
 }
 
-/* Search Button Styling */
+/* Search Container Styling - Bootstrap Compatible */
 .search-container {
     position: fixed;
     top: 20px;
@@ -802,21 +802,50 @@ body {
     z-index: 1000;
 }
 
-.search-input {
-    padding: 12px 20px;
-    border: 2px solid var(--aes-blue);
-    border-radius: 25px;
-    font-family: var(--font-primary);
-    font-size: 14px;
-    width: 250px;
-    outline: none;
-    transition: all 0.3s ease;
+.search-container .input-group {
     box-shadow: 0 4px 15px rgba(0, 173, 220, 0.2);
+    border-radius: 25px;
+    overflow: hidden;
 }
 
-.search-input:focus {
-    width: 300px;
-    box-shadow: 0 6px 20px rgba(0, 173, 220, 0.3);
+.search-container .input-group-text {
+    background: var(--aes-blue);
+    color: white;
+    border: none;
+}
+
+.search-container .form-control {
+    border: none;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-container .form-control:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Bootstrap Toast Customization */
+.toast-container .toast {
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.toast-header.bg-success {
+    background-color: var(--aes-green) !important;
+}
+
+.toast-header.bg-info {
+    background-color: var(--aes-blue) !important;
+}
+
+.toast-header.bg-warning {
+    background-color: var(--aes-yellow) !important;
+}
+
+.toast-header.bg-error {
+    background-color: #dc3545 !important;
 }
 
 /* Loading Animation */

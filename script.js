@@ -1,685 +1,549 @@
 // Interactive Conference Agenda JavaScript
+// Using external libraries for better maintainability
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the application
-    initializeApp();
-});
+// Configuration object for the application
+const AppConfig = {
+    animationDuration: 300,
+    notificationDuration: 3000,
+    searchDebounceDelay: 300,
+    localStorageKeys: {
+        notes: 'conferenceNotes',
+        favorites: 'conferenceFavorites'
+    }
+};
 
-function initializeApp() {
-    // Setup tab navigation
-    setupTabNavigation();
+// Main application class using modern ES6+ features
+class ConferenceApp {
+    constructor() {
+        this.searchInput = null;
+        this.favorites = new Set();
+        this.notes = new Map();
+        this.currentTab = 'overview';
+        
+        this.init();
+    }
     
-    // Setup interactive elements
-    setupInteractiveElements();
+    async init() {
+        try {
+            await this.initializeLibraries();
+            this.setupEventListeners();
+            this.loadPersistedData();
+            this.setupAnimations();
+            this.showWelcomeMessage();
+        } catch (error) {
+            console.error('Failed to initialize application:', error);
+            this.showError('Failed to load application. Please refresh the page.');
+        }
+    }
     
-    // Setup animations
-    setupAnimations();
+    async initializeLibraries() {
+        // Initialize AOS (Animate On Scroll)
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: AppConfig.animationDuration,
+                once: true,
+                offset: 100
+            });
+        }
+        
+        // Initialize Bootstrap tooltips
+        if (typeof bootstrap !== 'undefined') {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        }
+    }
     
+    setupEventListeners() {
+        this.setupTabNavigation();
+        this.setupSearchFunctionality();
+        this.setupAttendeeFeatures();
+        this.setupKeyboardShortcuts();
+        this.setupResponsiveFeatures();
+    }
     
-    // Setup search functionality
-    setupSearchFunctionality();
-    
-    // Setup time tracking
-    setupTimeTracking();
-    
-    // Setup responsive features
-    setupResponsiveFeatures();
-    
-    // Setup attendee features
-    setupAttendeeFeatures();
-    
-    // Load saved notes
-    loadNotes();
-}
-
-// Tab Navigation
-function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetTab = this.getAttribute('data-tab');
-            
-            // Remove active class from all buttons and contents
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-            
-            // Add active class to clicked button and corresponding content
-            this.classList.add('active');
-            document.getElementById(targetTab).classList.add('active');
-            
-            // Add visual feedback
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 150);
-            
-            // Scroll to top of content
-            document.getElementById(targetTab).scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
+    // Tab Navigation using Bootstrap patterns
+    setupTabNavigation() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetTab = button.getAttribute('data-tab');
+                
+                // Use Bootstrap-like tab switching
+                this.switchTab(targetTab, button, tabButtons, tabContents);
             });
         });
-    });
-}
-
-// Interactive Elements
-function setupInteractiveElements() {
-    // Add hover effects to time slots
-    const timeSlots = document.querySelectorAll('.time-slot');
-    timeSlots.forEach(slot => {
-        slot.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-3px) scale(1.02)';
-        });
-        
-        slot.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-        
-        // Add click to expand/collapse details
-        slot.addEventListener('click', function() {
-            const details = this.querySelector('.event-details');
-            if (details) {
-                details.classList.toggle('expanded');
-            }
-        });
-    });
+    }
     
-    // Add interactive outcome items
-    const outcomeItems = document.querySelectorAll('.outcome-item');
-    outcomeItems.forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.toggle('highlighted');
+    switchTab(targetTab, activeButton, allButtons, allContents) {
+        // Remove active classes
+        allButtons.forEach(btn => btn.classList.remove('active'));
+        allContents.forEach(content => content.classList.remove('active'));
+        
+        // Add active classes with animation
+        activeButton.classList.add('active');
+        const targetContent = document.getElementById(targetTab);
+        if (targetContent) {
+            targetContent.classList.add('active');
             
-            // Add a brief animation
-            this.style.transform = 'scale(1.05)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 200);
-        });
-    });
-    
-    // Add interactive invitee list
-    const inviteeItems = document.querySelectorAll('.invitee-list li');
-    inviteeItems.forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.toggle('selected');
-        });
-    });
-}
-
-// Animations
-function setupAnimations() {
-    // Animate elements on scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-    
-    // Observe all sections and time slots
-    const elementsToAnimate = document.querySelectorAll('.section, .time-slot, .day-summary');
-    elementsToAnimate.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(element);
-    });
-}
-
-
-// Search Functionality
-function setupSearchFunctionality() {
-    // Add search input
-    const searchContainer = document.createElement('div');
-    searchContainer.className = 'search-container';
-    searchContainer.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-    `;
-    
-    const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Search agenda...';
-    searchInput.className = 'search-input';
-    
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        searchAgenda(searchTerm);
-    });
-    
-    searchContainer.appendChild(searchInput);
-    document.body.appendChild(searchContainer);
-}
-
-function searchAgenda(searchTerm) {
-    const allElements = document.querySelectorAll('.time-slot, .section, .detail-item');
-    
-    allElements.forEach(element => {
-        const text = element.textContent.toLowerCase();
-        const parent = element.closest('.time-slot, .section');
-        
-        if (text.includes(searchTerm)) {
-            element.style.background = 'rgba(52, 152, 219, 0.1)';
-            element.style.borderLeft = '4px solid #3498db';
-            if (parent) parent.style.display = 'block';
-        } else {
-            element.style.background = '';
-            element.style.borderLeft = '';
-            if (searchTerm && parent) {
-                parent.style.display = 'none';
-            } else {
-                parent.style.display = 'block';
+            // Add AOS animation if available
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
             }
         }
-    });
-    
-    // If search term is empty, show all elements
-    if (!searchTerm) {
-        allElements.forEach(element => {
-            element.style.background = '';
-            element.style.borderLeft = '';
-            element.closest('.time-slot, .section').style.display = 'block';
+        
+        this.currentTab = targetTab;
+        
+        // Smooth scroll to content
+        targetContent?.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
         });
     }
-}
-
-// Time Tracking
-function setupTimeTracking() {
-    const timeSlots = document.querySelectorAll('.time-slot');
-    const currentTime = new Date();
     
-    timeSlots.forEach(slot => {
-        const timeElement = slot.querySelector('.time');
-        if (timeElement) {
-            const timeText = timeElement.textContent;
-            const slotTime = parseTimeSlot(timeText);
-            
-            if (slotTime) {
-                const timeDiff = slotTime.getTime() - currentTime.getTime();
-                const hoursUntil = Math.floor(timeDiff / (1000 * 60 * 60));
-                const minutesUntil = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                
-                if (timeDiff > 0 && timeDiff < 24 * 60 * 60 * 1000) { // Within 24 hours
-                    const timeIndicator = document.createElement('div');
-                    timeIndicator.className = 'time-indicator';
-                    timeIndicator.style.cssText = `
-                        position: absolute;
-                        top: 5px;
-                        right: 5px;
-                        background: #e74c3c;
-                        color: white;
-                        padding: 2px 6px;
-                        border-radius: 10px;
-                        font-size: 10px;
-                        font-weight: bold;
-                    `;
-                    
-                    if (hoursUntil > 0) {
-                        timeIndicator.textContent = `${hoursUntil}h ${minutesUntil}m`;
-                    } else {
-                        timeIndicator.textContent = `${minutesUntil}m`;
-                    }
-                    
-                    timeElement.style.position = 'relative';
-                    timeElement.appendChild(timeIndicator);
-                }
-            }
-        }
-    });
-}
-
-function parseTimeSlot(timeText) {
-    const today = new Date();
-    const [timePart, period] = timeText.split(/(am|pm)/i);
-    const [hours, minutes] = timePart.split(':').map(Number);
-    
-    if (period && (period.toLowerCase() === 'am' || period.toLowerCase() === 'pm')) {
-        let adjustedHours = hours;
-        if (period.toLowerCase() === 'pm' && hours !== 12) {
-            adjustedHours += 12;
-        } else if (period.toLowerCase() === 'am' && hours === 12) {
-            adjustedHours = 0;
-        }
-        
-        const slotTime = new Date(today);
-        slotTime.setHours(adjustedHours, minutes || 0, 0, 0);
-        
-        return slotTime;
+    // Search Functionality using lodash debounce
+    setupSearchFunctionality() {
+        this.createSearchInterface();
+        this.setupSearchHandlers();
     }
-    return null;
-}
-
-// Responsive Features
-function setupResponsiveFeatures() {
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        const isMobile = window.innerWidth <= 768;
-        const navTabs = document.querySelector('.nav-tabs');
-        
-        if (isMobile) {
-            navTabs.style.flexDirection = 'column';
-        } else {
-            navTabs.style.flexDirection = 'row';
-        }
-    });
     
-    // Add mobile menu toggle with AES styling
-    if (window.innerWidth <= 768) {
-        const navToggle = document.createElement('button');
-        navToggle.innerHTML = '<i class="fas fa-bars"></i>';
-        navToggle.className = 'nav-toggle';
-        navToggle.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 80px;
-            background: var(--aes-dark-blue);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1001;
-            display: none;
+    createSearchInterface() {
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'search-container';
+        searchContainer.innerHTML = `
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" class="form-control search-input" 
+                       placeholder="Search agenda..." 
+                       data-bs-toggle="tooltip" 
+                       data-bs-placement="bottom" 
+                       title="Search through agenda content (Ctrl+F)">
+            </div>
         `;
         
-        navToggle.addEventListener('click', function() {
-            const navTabs = document.querySelector('.nav-tabs');
-            navTabs.classList.toggle('mobile-open');
+        searchContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            max-width: 300px;
+        `;
+        
+        this.searchInput = searchContainer.querySelector('.search-input');
+        document.body.appendChild(searchContainer);
+    }
+    
+    setupSearchHandlers() {
+        // Use lodash debounce for better performance
+        const debouncedSearch = typeof _ !== 'undefined' 
+            ? _.debounce(this.searchAgenda.bind(this), AppConfig.searchDebounceDelay)
+            : this.searchAgenda.bind(this);
+            
+        this.searchInput.addEventListener('input', (e) => {
+            debouncedSearch(e.target.value.toLowerCase());
         });
         
-        document.body.appendChild(navToggle);
+        // Clear search on escape
+        this.searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                e.target.value = '';
+                this.clearSearch();
+            }
+        });
     }
-}
-
-// Attendee Features
-function setupAttendeeFeatures() {
-    // Setup favorites functionality
-    setupFavorites();
     
-    // Setup notes functionality
-    setupNotes();
-    
-    // Setup material downloads
-    setupMaterialDownloads();
-    
-    // Setup my schedule section
-    setupMySchedule();
-}
-
-function setupFavorites() {
-    const favoriteButtons = document.querySelectorAll('.favorite-btn');
-    
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const timeSlot = this.closest('.time-slot');
-            const sessionTitle = timeSlot.querySelector('h3').textContent;
+    searchAgenda(searchTerm) {
+        const searchableElements = document.querySelectorAll('.time-slot, .section, .detail-item');
+        let matchCount = 0;
+        
+        searchableElements.forEach(element => {
+            const text = element.textContent.toLowerCase();
+            const parent = element.closest('.time-slot, .section');
+            const hasMatch = text.includes(searchTerm);
             
-            if (this.classList.contains('favorited')) {
-                // Remove from favorites
-                this.classList.remove('favorited');
-                this.innerHTML = '<i class="fas fa-star"></i>';
-                removeFromFavorites(sessionTitle);
+            if (hasMatch) {
+                matchCount++;
+                element.classList.add('search-highlight');
+                if (parent) parent.style.display = 'block';
             } else {
-                // Add to favorites
-                this.classList.add('favorited');
-                this.innerHTML = '<i class="fas fa-star"></i>';
-                addToFavorites(sessionTitle, timeSlot);
+                element.classList.remove('search-highlight');
+                if (searchTerm && parent) {
+                    parent.style.display = 'none';
+                } else {
+                    parent.style.display = 'block';
+                }
             }
         });
-    });
-}
-
-function setupNotes() {
-    const notesButtons = document.querySelectorAll('.notes-btn');
+        
+        // Show search results count
+        if (searchTerm) {
+            this.showSearchResults(matchCount);
+        } else {
+            this.clearSearch();
+        }
+    }
     
-    notesButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const timeSlot = this.closest('.time-slot');
-            const notesSection = timeSlot.querySelector('.session-notes');
-            
-            if (notesSection.style.display === 'none') {
-                notesSection.style.display = 'block';
-                this.innerHTML = '<i class="fas fa-sticky-note"></i>';
-                this.style.background = 'var(--aes-green)';
-                this.style.color = 'white';
-            } else {
-                notesSection.style.display = 'none';
-                this.innerHTML = '<i class="fas fa-sticky-note"></i>';
-                this.style.background = 'transparent';
-                this.style.color = 'var(--aes-blue)';
-            }
+    clearSearch() {
+        const highlightedElements = document.querySelectorAll('.search-highlight');
+        highlightedElements.forEach(element => {
+            element.classList.remove('search-highlight');
+            const parent = element.closest('.time-slot, .section');
+            if (parent) parent.style.display = 'block';
         });
-    });
+    }
     
-    // Setup save notes functionality
-    const saveButtons = document.querySelectorAll('.save-notes-btn');
-    saveButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const textarea = this.previousElementSibling;
-            const sessionTitle = this.closest('.time-slot').querySelector('h3').textContent;
-            saveNotes(sessionTitle, textarea.value);
-            
-            // Show confirmation
-            const originalText = this.textContent;
-            this.textContent = 'Saved!';
-            this.style.background = 'var(--aes-green)';
-            setTimeout(() => {
-                this.textContent = originalText;
-                this.style.background = 'var(--aes-dark-blue)';
-            }, 2000);
-        });
-    });
-}
-
-function setupMaterialDownloads() {
-    const materialLinks = document.querySelectorAll('.material-link');
+    showSearchResults(count) {
+        // Use Bootstrap toast for search results
+        if (typeof bootstrap !== 'undefined') {
+            this.showToast(`${count} results found`, 'info');
+        }
+    }
     
-    materialLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const fileName = this.textContent.trim();
-            
-            // Simulate download
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-download"></i> Downloading...';
-            this.style.color = 'var(--aes-green)';
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                this.style.color = 'var(--aes-blue)';
+    // Setup attendee features (favorites, notes, materials)
+    setupAttendeeFeatures() {
+        this.setupFavorites();
+        this.setupNotes();
+        this.setupMaterialDownloads();
+        this.setupMySchedule();
+    }
+    
+    setupFavorites() {
+        const favoriteButtons = document.querySelectorAll('.favorite-btn');
+        
+        favoriteButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const timeSlot = e.target.closest('.time-slot');
+                const sessionTitle = timeSlot.querySelector('h3').textContent;
                 
-                // Show download notification
-                showNotification(`${fileName} downloaded successfully!`);
-            }, 1500);
+                if (button.classList.contains('favorited')) {
+                    this.removeFromFavorites(sessionTitle, button);
+                } else {
+                    this.addToFavorites(sessionTitle, timeSlot, button);
+                }
+            });
         });
-    });
-}
-
-function setupMySchedule() {
-    // Create my schedule section
-    const overviewTab = document.getElementById('overview');
-    const myScheduleSection = document.createElement('section');
-    myScheduleSection.className = 'section my-schedule';
-    myScheduleSection.innerHTML = `
-        <h3><i class="fas fa-heart"></i> My Schedule</h3>
-        <p>Your favorite sessions and personal notes</p>
-        <div id="favorite-sessions-list">
-            <p class="no-favorites">No favorite sessions yet. Click the star icon on any session to add it to your schedule.</p>
-        </div>
-    `;
-    
-    overviewTab.appendChild(myScheduleSection);
-}
-
-function addToFavorites(sessionTitle, timeSlot) {
-    const favoritesList = document.getElementById('favorite-sessions-list');
-    const noFavoritesMsg = favoritesList.querySelector('.no-favorites');
-    
-    if (noFavoritesMsg) {
-        noFavoritesMsg.remove();
     }
     
-    // Check if already exists
-    const existingItem = favoritesList.querySelector(`[data-session="${sessionTitle}"]`);
-    if (existingItem) return;
+    addToFavorites(sessionTitle, timeSlot, button) {
+        this.favorites.add(sessionTitle);
+        button.classList.add('favorited');
+        this.saveFavorites();
+        this.showToast(`${sessionTitle} added to your schedule!`, 'success');
+    }
     
-    const sessionTime = timeSlot.querySelector('.time').textContent;
-    const favoriteItem = document.createElement('li');
-    favoriteItem.innerHTML = `
-        <div>
-            <div class="session-time">${sessionTime}</div>
-            <div>${sessionTitle}</div>
-        </div>
-        <button class="remove-favorite-btn" title="Remove from Favorites">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    favoriteItem.setAttribute('data-session', sessionTitle);
+    removeFromFavorites(sessionTitle, button) {
+        this.favorites.delete(sessionTitle);
+        button.classList.remove('favorited');
+        this.saveFavorites();
+        this.showToast(`${sessionTitle} removed from your schedule`, 'info');
+    }
     
-    // Add remove functionality
-    const removeBtn = favoriteItem.querySelector('.remove-favorite-btn');
-    removeBtn.addEventListener('click', function() {
-        favoriteItem.remove();
-        removeFromFavorites(sessionTitle);
+    setupNotes() {
+        const notesButtons = document.querySelectorAll('.notes-btn');
         
-        // Show no favorites message if list is empty
-        if (favoritesList.children.length === 0) {
-            favoritesList.innerHTML = '<p class="no-favorites">No favorite sessions yet. Click the star icon on any session to add it to your schedule.</p>';
-        }
-    });
+        notesButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const timeSlot = e.target.closest('.time-slot');
+                const notesSection = timeSlot.querySelector('.session-notes');
+                
+                if (notesSection.style.display === 'none') {
+                    notesSection.style.display = 'block';
+                    button.style.background = 'var(--aes-green)';
+                    button.style.color = 'white';
+                } else {
+                    notesSection.style.display = 'none';
+                    button.style.background = 'transparent';
+                    button.style.color = 'var(--aes-blue)';
+                }
+            });
+        });
+        
+        // Setup save notes functionality
+        const saveButtons = document.querySelectorAll('.save-notes-btn');
+        saveButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const timeSlot = e.target.closest('.time-slot');
+                const textarea = timeSlot.querySelector('.session-notes textarea');
+                const sessionTitle = timeSlot.querySelector('h3').textContent;
+                
+                this.saveSessionNotes(sessionTitle, textarea.value);
+                
+                // Show confirmation
+                const originalText = button.textContent;
+                button.textContent = 'Saved!';
+                button.style.background = 'var(--aes-green)';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'var(--aes-dark-blue)';
+                }, 2000);
+            });
+        });
+    }
     
-    favoritesList.appendChild(favoriteItem);
-    showNotification(`${sessionTitle} added to your schedule!`);
-}
-
-function removeFromFavorites(sessionTitle) {
-    // Update the star button in the original session
-    const timeSlot = document.querySelector(`[data-session]`);
-    if (timeSlot) {
-        const favoriteBtn = timeSlot.querySelector('.favorite-btn');
-        if (favoriteBtn) {
-            favoriteBtn.classList.remove('favorited');
-            favoriteBtn.innerHTML = '<i class="fas fa-star"></i>';
+    saveSessionNotes(sessionTitle, notes) {
+        this.notes.set(sessionTitle, notes);
+        this.saveNotes();
+    }
+    
+    setupMaterialDownloads() {
+        const materialLinks = document.querySelectorAll('.material-link');
+        
+        materialLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const fileName = link.textContent.trim();
+                
+                // Simulate download with animation
+                const originalText = link.innerHTML;
+                link.innerHTML = '<i class="fas fa-download"></i> Downloading...';
+                link.style.color = 'var(--aes-green)';
+                
+                setTimeout(() => {
+                    link.innerHTML = originalText;
+                    link.style.color = 'var(--aes-blue)';
+                    this.showToast(`${fileName} downloaded successfully!`, 'success');
+                }, 1500);
+            });
+        });
+    }
+    
+    setupMySchedule() {
+        // Create my schedule section
+        const overviewTab = document.getElementById('overview');
+        if (overviewTab && !document.querySelector('.my-schedule')) {
+            const myScheduleSection = document.createElement('section');
+            myScheduleSection.className = 'section my-schedule';
+            myScheduleSection.innerHTML = `
+                <h3><i class="fas fa-heart"></i> My Schedule</h3>
+                <p>Your favorite sessions and personal notes</p>
+                <div id="favorite-sessions-list">
+                    <p class="no-favorites">No favorite sessions yet. Click the star icon on any session to add it to your schedule.</p>
+                </div>
+            `;
+            
+            overviewTab.appendChild(myScheduleSection);
         }
     }
     
-    showNotification(`${sessionTitle} removed from your schedule`);
-}
-
-function saveNotes(sessionTitle, notes) {
-    // Save to localStorage
-    const savedNotes = JSON.parse(localStorage.getItem('conferenceNotes') || '{}');
-    savedNotes[sessionTitle] = notes;
-    localStorage.setItem('conferenceNotes', JSON.stringify(savedNotes));
-}
-
-function loadNotes() {
-    const savedNotes = JSON.parse(localStorage.getItem('conferenceNotes') || '{}');
+    loadPersistedData() {
+        this.loadNotes();
+        this.loadFavorites();
+    }
     
-    Object.keys(savedNotes).forEach(sessionTitle => {
-        const timeSlot = document.querySelector(`[data-session]`);
-        if (timeSlot) {
-            const notesTextarea = timeSlot.querySelector('.session-notes textarea');
-            if (notesTextarea) {
-                notesTextarea.value = savedNotes[sessionTitle];
-            }
+    // Modern notification system using Bootstrap toasts
+    showToast(message, type = 'success') {
+        if (typeof bootstrap !== 'undefined') {
+            this.createBootstrapToast(message, type);
+        } else {
+            this.showFallbackNotification(message);
         }
-    });
-}
-
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: var(--aes-green);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        z-index: 10000;
-        font-family: var(--font-primary);
-        font-size: 14px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        animation: slideIn 0.3s ease;
-    `;
+    }
     
-    document.body.appendChild(notification);
+    createBootstrapToast(message, type) {
+        const toastContainer = this.getOrCreateToastContainer();
+        
+        const toastId = `toast-${Date.now()}`;
+        const toastHtml = `
+            <div class="toast" id="${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-${type} text-white">
+                    <i class="fas fa-${this.getToastIcon(type)} me-2"></i>
+                    <strong class="me-auto">Conference Agenda</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: AppConfig.notificationDuration
+        });
+        
+        toast.show();
+        
+        // Clean up after toast is hidden
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
+    }
     
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
+    getOrCreateToastContainer() {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '1055';
+            document.body.appendChild(container);
+        }
+        return container;
+    }
+    
+    getToastIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
+    
+    showFallbackNotification(message) {
+        // Fallback for when Bootstrap is not available
+        const notification = document.createElement('div');
+        notification.className = 'alert alert-success alert-dismissible fade show';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1055;
+            min-width: 300px;
+        `;
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
         setTimeout(() => {
             notification.remove();
-        }, 300);
-    }, 3000);
+        }, AppConfig.notificationDuration);
+    }
+    
+    showError(message) {
+        this.showToast(message, 'error');
+    }
+    
+    showWelcomeMessage() {
+        setTimeout(() => {
+            this.showToast('Welcome to the 2025 Fall Leadership Conference Agenda!', 'info');
+        }, 1000);
+    }
+    
+    // Setup animations using AOS library
+    setupAnimations() {
+        // Add AOS attributes to elements
+        const animateElements = document.querySelectorAll('.section, .time-slot, .day-summary');
+        animateElements.forEach((element, index) => {
+            element.setAttribute('data-aos', 'fade-up');
+            element.setAttribute('data-aos-delay', (index * 50).toString());
+        });
+        
+        // Refresh AOS if available
+        if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+        }
+    }
+    
+    // Setup keyboard shortcuts
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        this.switchToTab('overview');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        this.switchToTab('wednesday');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        this.switchToTab('thursday');
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        this.switchToTab('friday');
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        this.searchInput?.focus();
+                        break;
+                }
+            }
+        });
+    }
+    
+    switchToTab(tabName) {
+        const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
+        if (tabButton) {
+            tabButton.click();
+        }
+    }
+    
+    // Setup responsive features
+    setupResponsiveFeatures() {
+        window.addEventListener('resize', () => {
+            // Refresh AOS on resize
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        });
+    }
+    
+    // Load and save data methods
+    loadNotes() {
+        try {
+            const savedNotes = localStorage.getItem(AppConfig.localStorageKeys.notes);
+            if (savedNotes) {
+                this.notes = new Map(Object.entries(JSON.parse(savedNotes)));
+            }
+        } catch (error) {
+            console.error('Failed to load notes:', error);
+        }
+    }
+    
+    loadFavorites() {
+        try {
+            const savedFavorites = localStorage.getItem(AppConfig.localStorageKeys.favorites);
+            if (savedFavorites) {
+                this.favorites = new Set(JSON.parse(savedFavorites));
+            }
+        } catch (error) {
+            console.error('Failed to load favorites:', error);
+        }
+    }
+    
+    saveNotes() {
+        try {
+            const notesObj = Object.fromEntries(this.notes);
+            localStorage.setItem(AppConfig.localStorageKeys.notes, JSON.stringify(notesObj));
+        } catch (error) {
+            console.error('Failed to save notes:', error);
+        }
+    }
+    
+    saveFavorites() {
+        try {
+            localStorage.setItem(AppConfig.localStorageKeys.favorites, JSON.stringify([...this.favorites]));
+        } catch (error) {
+            console.error('Failed to save favorites:', error);
+        }
+    }
 }
 
-// Add CSS animations for notifications
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.conferenceApp = new ConferenceApp();
+});
+
+// Add CSS for search highlighting
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
+    .search-highlight {
+        background: rgba(0, 173, 220, 0.1) !important;
+        border-left: 4px solid var(--aes-blue) !important;
     }
 `;
 document.head.appendChild(style);
-
-// Utility Functions
-function addToCalendar(eventData) {
-    // Generate ICS format for calendar import
-    const icsContent = generateICS(eventData);
-    const blob = new Blob([icsContent], { type: 'text/calendar' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'conference-agenda.ics';
-    link.click();
-    
-    URL.revokeObjectURL(url);
-}
-
-function generateICS(eventData) {
-    const formatDate = (date) => {
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-    };
-    
-    let ics = 'BEGIN:VCALENDAR\n';
-    ics += 'VERSION:2.0\n';
-    ics += 'PRODID:-//AES Engineering//Conference Agenda//EN\n';
-    
-    eventData.forEach(event => {
-        ics += 'BEGIN:VEVENT\n';
-        ics += `DTSTART:${formatDate(event.start)}\n`;
-        ics += `DTEND:${formatDate(event.end)}\n`;
-        ics += `SUMMARY:${event.title}\n`;
-        ics += `DESCRIPTION:${event.description}\n`;
-        ics += `LOCATION:Oak Bay Beach Hotel, Victoria, BC\n`;
-        ics += 'END:VEVENT\n';
-    });
-    
-    ics += 'END:VCALENDAR';
-    return ics;
-}
-
-// Add keyboard navigation
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey || e.metaKey) {
-        switch(e.key) {
-            case '1':
-                e.preventDefault();
-                document.querySelector('[data-tab="overview"]').click();
-                break;
-            case '2':
-                e.preventDefault();
-                document.querySelector('[data-tab="wednesday"]').click();
-                break;
-            case '3':
-                e.preventDefault();
-                document.querySelector('[data-tab="thursday"]').click();
-                break;
-            case '4':
-                e.preventDefault();
-                document.querySelector('[data-tab="friday"]').click();
-                break;
-            case 'f':
-                e.preventDefault();
-                document.querySelector('.search-input').focus();
-                break;
-        }
-    }
-});
-
-// Add loading animation
-window.addEventListener('load', function() {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.5s ease';
-    
-    setTimeout(() => {
-        document.body.style.opacity = '1';
-    }, 100);
-});
-
-// Add smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Add tooltips for interactive elements
-function addTooltip(element, text) {
-    element.addEventListener('mouseenter', function() {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = text;
-        tooltip.style.cssText = `
-            position: absolute;
-            background: #2c3e50;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            z-index: 1000;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        `;
-        
-        document.body.appendChild(tooltip);
-        
-        const rect = this.getBoundingClientRect();
-        tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
-        tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
-        
-        setTimeout(() => {
-            tooltip.style.opacity = '1';
-        }, 10);
-        
-        this._tooltip = tooltip;
-    });
-    
-    element.addEventListener('mouseleave', function() {
-        if (this._tooltip) {
-            this._tooltip.remove();
-            this._tooltip = null;
-        }
-    });
-}
-
-// Initialize tooltips for key elements
-document.addEventListener('DOMContentLoaded', function() {
-    const printButton = document.querySelector('.print-button');
-    const searchInput = document.querySelector('.search-input');
-    
-    
-    if (searchInput) {
-        addTooltip(searchInput, 'Search agenda content (Ctrl+F)');
-    }
-});
-
