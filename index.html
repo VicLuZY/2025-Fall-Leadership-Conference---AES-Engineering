@@ -72,8 +72,28 @@
             <button class="tab-button" data-tab="friday">Friday</button>
         </nav>
 
-        <!-- Overview Tab -->
-        <div id="overview" class="tab-content active">
+        <!-- Carousel Controls for Large Screens -->
+        <div class="carousel-controls">
+            <button class="carousel-btn prev-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+                <span>Previous Day</span>
+            </button>
+            <div class="carousel-indicators">
+                <span class="indicator active" data-slide="0">Overview</span>
+                <span class="indicator" data-slide="1">Wed</span>
+                <span class="indicator" data-slide="2">Thu</span>
+                <span class="indicator" data-slide="3">Fri</span>
+            </div>
+            <button class="carousel-btn next-btn" id="nextBtn">
+                <span>Next Day</span>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Carousel Container -->
+        <div class="carousel-container">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content carousel-slide active">
             <section class="section">
                 <h2><i class="fas fa-users"></i> Invitees</h2>
                 <div class="invitees">
@@ -180,6 +200,113 @@
                             <li>Q1 & Q2 2026 Action Planning</li>
                             <li>Self-Evaluation & Theme Setting</li>
                         </ul>
+                    </div>
+                </div>
+                
+                <!-- Horizontal Layout for Large Screens -->
+                <div class="day-schedule-horizontal">
+                    <div class="day-card">
+                        <div class="day-header">
+                            <h2><i class="fas fa-calendar-day"></i> Wednesday</h2>
+                            <div class="day-summary">Arrival & Financial Review</div>
+                        </div>
+                        <div class="schedule-compact">
+                            <div class="time-slot-compact">
+                                <div class="time-compact">11:00 AM</div>
+                                <div class="event-compact">
+                                    <h3>Check-in</h3>
+                                    <p>Welcome and registration</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">11:30 AM</div>
+                                <div class="event-compact">
+                                    <h3>Introductions & Lunch</h3>
+                                    <p>Team introductions and networking</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">1:00 PM</div>
+                                <div class="event-compact">
+                                    <h3>Financial Review</h3>
+                                    <p>Comprehensive financial analysis</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">6:30 PM</div>
+                                <div class="event-compact">
+                                    <h3>Team Dinner</h3>
+                                    <p>Group dinner and networking</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="day-card">
+                        <div class="day-header">
+                            <h2><i class="fas fa-calendar-day"></i> Thursday</h2>
+                            <div class="day-summary">Main Conference Day</div>
+                        </div>
+                        <div class="schedule-compact">
+                            <div class="time-slot-compact">
+                                <div class="time-compact">8:00 AM</div>
+                                <div class="event-compact">
+                                    <h3>FLC Main Session</h3>
+                                    <p>5 Dysfunctions & Rockefeller Habits</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">12:45 PM</div>
+                                <div class="event-compact">
+                                    <h3>Commitments Review</h3>
+                                    <p>Review Spring 2025 commitments</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">4:00 PM</div>
+                                <div class="event-compact">
+                                    <h3>Team Activity</h3>
+                                    <p>Clue Solvers "After the Goldrush"</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">6:30 PM</div>
+                                <div class="event-compact">
+                                    <h3>Team Dinner</h3>
+                                    <p>Group dinner and celebration</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="day-card">
+                        <div class="day-header">
+                            <h2><i class="fas fa-calendar-day"></i> Friday</h2>
+                            <div class="day-summary">Strategic Planning</div>
+                        </div>
+                        <div class="schedule-compact">
+                            <div class="time-slot-compact">
+                                <div class="time-compact">8:00 AM</div>
+                                <div class="event-compact">
+                                    <h3>Strategic Planning</h3>
+                                    <p>2026 priorities and action planning</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">12:45 PM</div>
+                                <div class="event-compact">
+                                    <h3>Final Session</h3>
+                                    <p>Leadership effectiveness & theme setting</p>
+                                </div>
+                            </div>
+                            <div class="time-slot-compact">
+                                <div class="time-compact">2:30 PM</div>
+                                <div class="event-compact">
+                                    <h3>Conference Close</h3>
+                                    <p>Wrap-up and departure</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -300,8 +427,8 @@
             </section>
         </div>
 
-        <!-- Wednesday Tab -->
-        <div id="wednesday" class="tab-content">
+            <!-- Wednesday Tab -->
+            <div id="wednesday" class="tab-content carousel-slide">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Wednesday, October 15<sup>th</sup>, 2025</h2>
             </div>
@@ -420,8 +547,8 @@
             </div>
         </div>
 
-        <!-- Thursday Tab -->
-        <div id="thursday" class="tab-content">
+            <!-- Thursday Tab -->
+            <div id="thursday" class="tab-content carousel-slide">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Thursday, October 16<sup>th</sup>, 2025</h2>
             </div>
@@ -599,8 +726,8 @@
             </div>
         </div>
 
-        <!-- Friday Tab -->
-        <div id="friday" class="tab-content">
+            <!-- Friday Tab -->
+            <div id="friday" class="tab-content carousel-slide">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Friday, October 17<sup>th</sup>, 2025</h2>
             </div>
@@ -677,6 +804,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <!-- Footer -->
