@@ -18,67 +18,69 @@
     <meta property="og:image" content="//images.squarespace-cdn.com/content/v1/6375d83efe581663b51064d7/84bb8ef0-3298-45f7-a295-87fa45b0698f/AES-Logo-green.png"/>
 </head>
 <body>
-    <div class="container">
-        <!-- AES Header Section -->
-        <header class="aes-header">
-            <div class="header-nav">
-                <div class="header-nav-wrapper">
-                    <div class="header-title">
-                        <div class="header-title-logo">
-                            <a href="https://www.aesengr.com" target="_blank">
-                                <img src="//images.squarespace-cdn.com/content/v1/6375d83efe581663b51064d7/84bb8ef0-3298-45f7-a295-87fa45b0698f/AES-Logo-green.png?format=1500w" alt="AES Engineering" style="display:block; height: 60px;">
-                            </a>
-                        </div>
-                    </div>
-                    <nav class="header-nav-list">
-                        <div class="header-nav-item">
-                            <a href="https://www.aesengr.com/who-we-are" target="_blank">Who We Are</a>
-                        </div>
-                        <div class="header-nav-item">
-                            <a href="https://www.aesengr.com/services" target="_blank">Services</a>
-                        </div>
-                        <div class="header-nav-item">
-                            <a href="https://www.aesengr.com/projects" target="_blank">Projects</a>
-                        </div>
-                        <div class="header-nav-item">
-                            <a href="https://www.aesengr.com/contact" target="_blank">Contact</a>
-                        </div>
-                    </nav>
+    <!-- Prezi Canvas -->
+    <div class="prezi-canvas" id="preziCanvas">
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomIn">
+                <i class="fas fa-plus"></i>
+            </button>
+            <button class="zoom-btn" id="zoomOut">
+                <i class="fas fa-minus"></i>
+            </button>
+            <button class="zoom-btn" id="resetZoom">
+                <i class="fas fa-home"></i>
+            </button>
+        </div>
+
+        <!-- Zoom Indicator -->
+        <div class="zoom-indicator" id="zoomIndicator">
+            <span id="zoomLevel">100%</span>
+        </div>
+
+        <!-- Main Canvas Content -->
+        <div class="canvas-content" id="canvasContent">
+            
+            <!-- Navigation Hub -->
+            <div class="navigation-hub">
+                <div class="hub-center" id="hubCenter">
+                    <h2>FLC 2025</h2>
+                    <p>Conference Agenda</p>
+                </div>
+                
+                <div class="nav-orb overview" data-section="overview">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Overview</span>
+                </div>
+                
+                <div class="nav-orb wednesday" data-section="wednesday">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Wed</span>
+                </div>
+                
+                <div class="nav-orb thursday" data-section="thursday">
+                    <i class="fas fa-users"></i>
+                    <span>Thu</span>
+                </div>
+                
+                <div class="nav-orb friday" data-section="friday">
+                    <i class="fas fa-flag-checkered"></i>
+                    <span>Fri</span>
                 </div>
             </div>
-        </header>
 
-        <!-- Conference Header Section -->
-        <section class="conference-hero">
-            <div class="conference-hero-content">
-                <h1 class="conference-title">2025 Fall Leadership Conference</h1>
-                <div class="conference-details">
-                    <div class="date-location">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>October 15<sup>th</sup> - 17<sup>th</sup>, 2025</span>
-                    </div>
-                    <div class="date-location">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Oak Bay Beach Hotel, Victoria, BC</span>
-                    </div>
-                    <div class="theme">
-                        <i class="fas fa-lightbulb"></i>
-                        <span>Theme: TBD</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <!-- Floating Elements -->
+            <div class="floating-element" style="top: 100px; left: 100px; width: 60px; height: 60px; background: var(--aes-green); border-radius: 50%; opacity: 0.3;"></div>
+            <div class="floating-element" style="top: 200px; right: 150px; width: 40px; height: 40px; background: var(--aes-blue); border-radius: 50%; opacity: 0.4;"></div>
+            <div class="floating-element" style="bottom: 200px; left: 300px; width: 50px; height: 50px; background: var(--aes-yellow); border-radius: 50%; opacity: 0.3;"></div>
+            <div class="floating-element" style="top: 400px; left: 50px; width: 30px; height: 30px; background: var(--aes-dark-blue); border-radius: 50%; opacity: 0.5;"></div>
 
-        <!-- Navigation -->
-        <nav class="nav-tabs">
-            <button class="tab-button active" data-tab="overview">Overview</button>
-            <button class="tab-button" data-tab="wednesday">Wednesday</button>
-            <button class="tab-button" data-tab="thursday">Thursday</button>
-            <button class="tab-button" data-tab="friday">Friday</button>
-        </nav>
+            <!-- Connection Lines -->
+            <div class="connection-line" style="top: 50%; left: 0; width: 300px; transform: translateY(-50%);"></div>
+            <div class="connection-line" style="top: 0; left: 50%; width: 300px; transform: translateX(-50%) rotate(90deg);"></div>
 
-        <!-- Overview Tab -->
-        <div id="overview" class="tab-content active">
+            <!-- Content Sections -->
+            <div id="overview" class="content-section section-overview active">
             <section class="section">
                 <h2><i class="fas fa-users"></i> Invitees</h2>
                 <div class="invitees">
@@ -266,8 +268,7 @@
             </section>
         </div>
 
-        <!-- Wednesday Tab -->
-        <div id="wednesday" class="tab-content">
+            <div id="wednesday" class="content-section section-wednesday">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Wednesday, October 15<sup>th</sup>, 2025</h2>
             </div>
@@ -386,8 +387,7 @@
             </div>
         </div>
 
-        <!-- Thursday Tab -->
-        <div id="thursday" class="tab-content">
+            <div id="thursday" class="content-section section-thursday">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Thursday, October 16<sup>th</sup>, 2025</h2>
             </div>
@@ -565,8 +565,7 @@
             </div>
         </div>
 
-        <!-- Friday Tab -->
-        <div id="friday" class="tab-content">
+            <div id="friday" class="content-section section-friday">
             <div class="day-header-section">
                 <h2><i class="fas fa-calendar-day"></i> Friday, October 17<sup>th</sup>, 2025</h2>
             </div>
@@ -642,6 +641,7 @@
                         <p><strong>END OF FLC</strong></p>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
 

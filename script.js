@@ -12,13 +12,22 @@ const AppConfig = {
     }
 };
 
-// Main application class using modern ES6+ features
-class ConferenceApp {
+// Prezi-Style Conference Application
+class PreziConferenceApp {
     constructor() {
         this.searchInput = null;
         this.favorites = new Set();
         this.notes = new Map();
-        this.currentTab = 'overview';
+        this.currentSection = 'overview';
+        
+        // Prezi-specific properties
+        this.zoomLevel = 1;
+        this.panX = 0;
+        this.panY = 0;
+        this.isDragging = false;
+        this.dragStart = { x: 0, y: 0 };
+        this.canvas = null;
+        this.canvasContent = null;
         
         this.init();
     }
@@ -54,11 +63,227 @@ class ConferenceApp {
     }
     
     setupEventListeners() {
-        this.setupTabNavigation();
+        this.setupPreziCanvas();
+        this.setupOrbNavigation();
+        this.setupZoomControls();
         this.setupSearchFunctionality();
         this.setupAttendeeFeatures();
         this.setupKeyboardShortcuts();
         this.setupResponsiveFeatures();
+    }
+    
+    // Prezi Canvas Setup
+    setupPreziCanvas() {
+        this.canvas = document.getElementById('preziCanvas');
+        this.canvasContent = document.getElementById('canvasContent');
+        
+        if (!this.canvas || !this.canvasContent) return;
+        
+        // Mouse events for dragging
+        this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        this.canvas.addEventListener('mouseleave', this.handleMouseUp.bind(this));
+        
+        // Touch events for mobile
+        this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this));
+        this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this));
+        this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        
+        // Wheel events for zooming
+        this.canvas.addEventListener('wheel', this.handleWheel.bind(this));
+        
+        this.updateCanvasTransform();
+    }
+    
+    handleMouseDown(e) {
+        this.isDragging = true;
+        this.dragStart.x = e.clientX - this.panX;
+        this.dragStart.y = e.clientY - this.panY;
+        this.canvas.style.cursor = 'grabbing';
+    }
+    
+    handleMouseMove(e) {
+        if (!this.isDragging) return;
+        
+        this.panX = e.clientX - this.dragStart.x;
+        this.panY = e.clientY - this.dragStart.y;
+        this.updateCanvasTransform();
+    }
+    
+    handleMouseUp(e) {
+        this.isDragging = false;
+        this.canvas.style.cursor = 'grab';
+    }
+    
+    handleTouchStart(e) {
+        if (e.touches.length === 1) {
+            this.isDragging = true;
+            this.dragStart.x = e.touches[0].clientX - this.panX;
+            this.dragStart.y = e.touches[0].clientY - this.panY;
+        }
+    }
+    
+    handleTouchMove(e) {
+        if (!this.isDragging || e.touches.length !== 1) return;
+        
+        this.panX = e.touches[0].clientX - this.dragStart.x;
+        this.panY = e.touches[0].clientY - this.dragStart.y;
+        this.updateCanvasTransform();
+    }
+    
+    handleTouchEnd(e) {
+        this.isDragging = false;
+    }
+    
+    handleWheel(e) {
+        e.preventDefault();
+        const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+        this.zoomTo(this.zoomLevel * zoomFactor, e.clientX, e.clientY);
+    }
+    
+    // Zoom Controls Setup
+    setupZoomControls() {
+        const zoomIn = document.getElementById('zoomIn');
+        const zoomOut = document.getElementById('zoomOut');
+        const resetZoom = document.getElementById('resetZoom');
+        
+        if (zoomIn) {
+            zoomIn.addEventListener('click', () => this.zoomTo(this.zoomLevel * 1.2));
+        }
+        
+        if (zoomOut) {
+            zoomOut.addEventListener('click', () => this.zoomTo(this.zoomLevel * 0.8));
+        }
+        
+        if (resetZoom) {
+            resetZoom.addEventListener('click', () => this.resetView());
+        }
+    }
+    
+    zoomTo(level, centerX = window.innerWidth / 2, centerY = window.innerHeight / 2) {
+        const minZoom = 0.3;
+        const maxZoom = 3;
+        
+        this.zoomLevel = Math.max(minZoom, Math.min(maxZoom, level));
+        
+        // Adjust pan to zoom towards cursor
+        const rect = this.canvas.getBoundingClientRect();
+        const relativeX = centerX - rect.left;
+        const relativeY = centerY - rect.top;
+        
+        this.panX = relativeX - (relativeX - this.panX) * (this.zoomLevel / (level / 1.2 || 1));
+        this.panY = relativeY - (relativeY - this.panY) * (this.zoomLevel / (level / 1.2 || 1));
+        
+        this.updateCanvasTransform();
+        this.updateZoomIndicator();
+    }
+    
+    resetView() {
+        this.zoomLevel = 1;
+        this.panX = 0;
+        this.panY = 0;
+        this.updateCanvasTransform();
+        this.updateZoomIndicator();
+    }
+    
+    updateCanvasTransform() {
+        if (!this.canvasContent) return;
+        
+        this.canvasContent.style.transform = `translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`;
+    }
+    
+    updateZoomIndicator() {
+        const indicator = document.getElementById('zoomLevel');
+        if (indicator) {
+            indicator.textContent = `${Math.round(this.zoomLevel * 100)}%`;
+        }
+    }
+    
+    // Orb Navigation Setup
+    setupOrbNavigation() {
+        const orbs = document.querySelectorAll('.nav-orb');
+        const hubCenter = document.getElementById('hubCenter');
+        
+        orbs.forEach(orb => {
+            orb.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = orb.getAttribute('data-section');
+                this.navigateToSection(section);
+            });
+        });
+        
+        if (hubCenter) {
+            hubCenter.addEventListener('click', () => {
+                this.resetView();
+                this.showAllSections();
+            });
+        }
+    }
+    
+    navigateToSection(sectionName) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            section.classList.remove('active', 'focus');
+        });
+        
+        // Show target section
+        const targetSection = document.getElementById(sectionName);
+        if (targetSection) {
+            targetSection.classList.add('active', 'focus');
+            
+            // Calculate position to center the section
+            const rect = targetSection.getBoundingClientRect();
+            const canvasRect = this.canvas.getBoundingClientRect();
+            
+            const targetX = -(rect.left - canvasRect.left) + (window.innerWidth / 2) - (rect.width / 2);
+            const targetY = -(rect.top - canvasRect.top) + (window.innerHeight / 2) - (rect.height / 2);
+            
+            // Animate to section
+            this.animateToPosition(targetX, targetY, 1.5);
+            this.currentSection = sectionName;
+            
+            this.showToast(`Navigating to ${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)}`, 'info');
+        }
+    }
+    
+    showAllSections() {
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            section.classList.add('active');
+            section.classList.remove('focus');
+        });
+    }
+    
+    animateToPosition(targetX, targetY, targetZoom = 1) {
+        const startX = this.panX;
+        const startY = this.panY;
+        const startZoom = this.zoomLevel;
+        
+        const duration = 1000;
+        const startTime = performance.now();
+        
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            
+            this.panX = startX + (targetX - startX) * easeProgress;
+            this.panY = startY + (targetY - startY) * easeProgress;
+            this.zoomLevel = startZoom + (targetZoom - startZoom) * easeProgress;
+            
+            this.updateCanvasTransform();
+            this.updateZoomIndicator();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        requestAnimationFrame(animate);
     }
     
     // Tab Navigation using Bootstrap patterns
@@ -452,34 +677,48 @@ class ConferenceApp {
                 switch(e.key) {
                     case '1':
                         e.preventDefault();
-                        this.switchToTab('overview');
+                        this.navigateToSection('overview');
                         break;
                     case '2':
                         e.preventDefault();
-                        this.switchToTab('wednesday');
+                        this.navigateToSection('wednesday');
                         break;
                     case '3':
                         e.preventDefault();
-                        this.switchToTab('thursday');
+                        this.navigateToSection('thursday');
                         break;
                     case '4':
                         e.preventDefault();
-                        this.switchToTab('friday');
+                        this.navigateToSection('friday');
                         break;
                     case 'f':
                         e.preventDefault();
                         this.searchInput?.focus();
                         break;
+                    case '0':
+                        e.preventDefault();
+                        this.resetView();
+                        this.showAllSections();
+                        break;
                 }
             }
+            
+            // Arrow keys for navigation
+            switch(e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    this.zoomTo(this.zoomLevel * 1.1);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    this.zoomTo(this.zoomLevel * 0.9);
+                    break;
+                case 'Escape':
+                    this.resetView();
+                    this.showAllSections();
+                    break;
+            }
         });
-    }
-    
-    switchToTab(tabName) {
-        const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
-        if (tabButton) {
-            tabButton.click();
-        }
     }
     
     // Setup responsive features
@@ -533,9 +772,9 @@ class ConferenceApp {
     }
 }
 
-// Initialize the application when DOM is ready
+// Initialize the Prezi-style application when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.conferenceApp = new ConferenceApp();
+    window.preziApp = new PreziConferenceApp();
 });
 
 // Add CSS for search highlighting
