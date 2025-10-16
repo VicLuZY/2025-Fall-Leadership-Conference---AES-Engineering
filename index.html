@@ -4,282 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2025 Fall Leadership Conference - AES Engineering</title>
+    <meta name="description" content="Interactive agenda for the 2025 Fall Leadership Conference at AES Engineering. Featuring team building, strategic planning, and leadership development sessions.">
+    
+    <!-- Open Graph Meta Tags for AES Branding -->
+    <meta property="og:title" content="2025 Fall Leadership Conference - AES Engineering">
+    <meta property="og:description" content="Interactive agenda for the 2025 Fall Leadership Conference featuring team building and strategic planning sessions.">
+    <meta property="og:image" content="//images.squarespace-cdn.com/content/v1/6375d83efe581663b51064d7/84bb8ef0-3298-45f7-a295-87fa45b0698f/AES-Logo-green.png?format=1500w">
+    <meta property="og:url" content="https://www.aesengr.com">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <!-- External Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <meta property="og:site_name" content="AES Engineering"/>
-    <meta property="og:title" content="2025 Fall Leadership Conference - AES Engineering"/>
-    <meta property="og:image" content="//images.squarespace-cdn.com/content/v1/6375d83efe581663b51064d7/84bb8ef0-3298-45f7-a295-87fa45b0698f/AES-Logo-green.png"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Prezi Canvas -->
-    <div class="prezi-canvas" id="preziCanvas">
-        <!-- Zoom Controls -->
-        <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomIn">
-                <i class="fas fa-plus"></i>
-            </button>
-            <button class="zoom-btn" id="zoomOut">
-                <i class="fas fa-minus"></i>
-            </button>
-            <button class="zoom-btn" id="resetZoom">
-                <i class="fas fa-home"></i>
-            </button>
-        </div>
-
-        <!-- Zoom Indicator -->
-        <div class="zoom-indicator" id="zoomIndicator">
-            <span id="zoomLevel">100%</span>
-        </div>
-
-        <!-- Main Canvas Content -->
-        <div class="canvas-content" id="canvasContent">
-            
-            <!-- Navigation Hub -->
-            <div class="navigation-hub">
-                <div class="hub-center" id="hubCenter">
-                    <h2>FLC 2025</h2>
-                    <p>Conference Agenda</p>
+    <div class="container-fluid">
+        <!-- AES Header -->
+        <header class="aes-header">
+            <div class="header-content">
+                <div class="header-brand">
+                    <img src="//images.squarespace-cdn.com/content/v1/6375d83efe581663b51064d7/84bb8ef0-3298-45f7-a295-87fa45b0698f/AES-Logo-green.png?format=1500w" alt="AES Engineering" style="height: 50px;">
+                    <div class="header-text">
+                        <h1>AES Engineering</h1>
+                        <p>Professional Engineering Services</p>
+                    </div>
                 </div>
-                
-                <div class="nav-orb overview" data-section="overview">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Overview</span>
-                </div>
-                
-                <div class="nav-orb wednesday" data-section="wednesday">
-                    <i class="fas fa-calendar-day"></i>
-                    <span>Wed</span>
-                </div>
-                
-                <div class="nav-orb thursday" data-section="thursday">
-                    <i class="fas fa-users"></i>
-                    <span>Thu</span>
-                </div>
-                
-                <div class="nav-orb friday" data-section="friday">
-                    <i class="fas fa-flag-checkered"></i>
-                    <span>Fri</span>
-                </div>
+                <nav class="header-nav">
+                    <a href="https://www.aesengr.com" target="_blank">Home</a>
+                    <a href="https://www.aesengr.com/about" target="_blank">About</a>
+                    <a href="https://www.aesengr.com/services" target="_blank">Services</a>
+                    <a href="https://www.aesengr.com/contact" target="_blank">Contact</a>
+                </nav>
             </div>
+        </header>
 
-            <!-- Floating Elements -->
-            <div class="floating-element" style="top: 100px; left: 100px; width: 60px; height: 60px; background: var(--aes-green); border-radius: 50%; opacity: 0.3;"></div>
-            <div class="floating-element" style="top: 200px; right: 150px; width: 40px; height: 40px; background: var(--aes-blue); border-radius: 50%; opacity: 0.4;"></div>
-            <div class="floating-element" style="bottom: 200px; left: 300px; width: 50px; height: 50px; background: var(--aes-yellow); border-radius: 50%; opacity: 0.3;"></div>
-            <div class="floating-element" style="top: 400px; left: 50px; width: 30px; height: 30px; background: var(--aes-dark-blue); border-radius: 50%; opacity: 0.5;"></div>
-
-            <!-- Connection Lines -->
-            <div class="connection-line" style="top: 50%; left: 0; width: 300px; transform: translateY(-50%);"></div>
-            <div class="connection-line" style="top: 0; left: 50%; width: 300px; transform: translateX(-50%) rotate(90deg);"></div>
-
-            <!-- Content Sections -->
-            <div id="overview" class="content-section section-overview active">
-            <section class="section">
-                <h2><i class="fas fa-users"></i> Invitees</h2>
-                <div class="invitees">
-                    <div class="invitee-group">
-                        <h3>AES P&A</h3>
-                        <ul class="invitee-list">
-                            <li><i class="fas fa-user"></i> David Mobambola</li>
-                            <li><i class="fas fa-user"></i> Katie Bennett</li>
-                        </ul>
+        <!-- Conference Hero Section -->
+        <section class="conference-hero">
+            <div class="hero-content">
+                <h1>2025 Fall Leadership Conference</h1>
+                <div class="hero-details">
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>October 15-17, 2025</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Oak Bay Beach Hotel, Victoria, BC</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-users"></i>
+                        <span>AES P&A Leadership Team</span>
                     </div>
                 </div>
-            </section>
-
-            <section class="section">
-                <h2><i class="fas fa-bullseye"></i> Desired Outcomes</h2>
-                <div class="outcomes">
-                    <div class="outcome-item">
-                        <div class="outcome-number">1</div>
-                        <div class="outcome-text">
-                            <strong>Build Unity Across 4 Offices:</strong> Strengthen relationships and collaboration between all AES office locations through shared experiences, cross-office projects, and enhanced communication channels. This outcome focuses on breaking down silos and creating a unified company culture.
-                        </div>
-                    </div>
-                    <div class="outcome-item">
-                        <div class="outcome-number">2</div>
-                        <div class="outcome-text">
-                            <strong>Establish Strategic Alignment:</strong> Ensure all leaders and teams are aligned with the company's strategic direction, priorities, and objectives. This includes creating shared understanding of the One Page Strategic Plan (OPSP) and ensuring consistent execution across all practice areas and locations.
-                        </div>
-                    </div>
-                    <div class="outcome-item">
-                        <div class="outcome-number">3</div>
-                        <div class="outcome-text">
-                            <strong>Build Trust, Collaboration & Accountability:</strong> Strengthen the foundation of high-performing teams by addressing the five dysfunctions of a team, establishing clear accountability structures, and fostering an environment where leaders can have productive conflict and make commitments they will honor.
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2><i class="fas fa-wifi"></i> Conference Logistics</h2>
-                <div class="logistics-grid">
-                    <div class="logistics-item">
-                        <h3><i class="fas fa-map-marker-alt"></i> Venue Information</h3>
-                        <p><strong>Oak Bay Beach Hotel</strong></p>
-                        <p>1175 Beach Drive, Victoria, BC V8S 2N2</p>
-                        <p><strong>Phone:</strong> (250) 598-4556</p>
-                        <p><strong>Website:</strong> <a href="https://www.oakbaybeachhotel.com" target="_blank">oakbaybeachhotel.com</a></p>
-                    </div>
-                    <div class="logistics-item">
-                        <h3><i class="fas fa-wifi"></i> WiFi & Technology</h3>
-                        <p><strong>WiFi:</strong> Conference WiFi details will be provided at check-in</p>
-                        <p><strong>Power:</strong> Charging stations available in all meeting rooms</p>
-                        <p><strong>AV:</strong> All rooms equipped with presentation equipment</p>
-                    </div>
-                    <div class="logistics-item">
-                        <h3><i class="fas fa-parking"></i> Parking & Transportation</h3>
-                        <p><strong>Parking:</strong> Complimentary valet parking for conference attendees</p>
-                        <p><strong>Shuttle:</strong> Airport shuttle available (advance booking required)</p>
-                        <p><strong>Taxi:</strong> Hotel can arrange transportation to downtown Victoria</p>
-                    </div>
-                    <div class="logistics-item">
-                        <h3><i class="fas fa-utensils"></i> Dining & Refreshments</h3>
-                        <p><strong>Breakfast:</strong> 7:15 AM - 8:00 AM (Palos Verdes Terrace)</p>
-                        <p><strong>Lunch:</strong> Provided daily in conference rooms</p>
-                        <p><strong>Snacks:</strong> Coffee breaks with refreshments</p>
-                        <p><strong>Dinner:</strong> Group dinners at local restaurants</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2><i class="fas fa-info-circle"></i> Quick Agenda Overview</h2>
-                <div class="agenda-overview">
-                    <div class="day-summary">
-                        <div class="day-header">
-                            <i class="fas fa-calendar-day"></i>
-                            <h3>Wednesday, October 15<sup>th</sup></h3>
-                        </div>
-                        <ul class="day-highlights">
-                            <li>Check-in & Introductions</li>
-                            <li>Financial Review & Analysis</li>
-                            <li>Team Dinner at Vis-a-vis</li>
-                        </ul>
-                    </div>
-                    <div class="day-summary">
-                        <div class="day-header">
-                            <i class="fas fa-calendar-day"></i>
-                            <h3>Thursday, October 16<sup>th</sup></h3>
-                        </div>
-                        <ul class="day-highlights">
-                            <li>5 Dysfunctions Team Review</li>
-                            <li>Rockefeller Habits Book Review</li>
-                            <li>One Page Strategic Plan (OPSP)</li>
-                            <li>Team Activity: Clue Solvers</li>
-                            <li>Dinner at Bard and Banker</li>
-                        </ul>
-                    </div>
-                    <div class="day-summary">
-                        <div class="day-header">
-                            <i class="fas fa-calendar-day"></i>
-                            <h3>Friday, October 17<sup>th</sup></h3>
-                        </div>
-                        <ul class="day-highlights">
-                            <li>Strategic Priorities for 2026</li>
-                            <li>Q1 & Q2 2026 Action Planning</li>
-                            <li>Self-Evaluation & Theme Setting</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-
-            <section class="section">
-                <h2><i class="fas fa-download"></i> Session Materials & Resources</h2>
-                <div class="materials-grid">
-                    <div class="material-item">
-                        <h3><i class="fas fa-file-pdf"></i> Pre-Conference Reading</h3>
-                        <ul class="material-list">
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Five Dysfunctions of a Team - Summary</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Rockefeller Habits Overview</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> OPSP Template</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Financial Review Materials</a></li>
-                        </ul>
-                    </div>
-                    <div class="material-item">
-                        <h3><i class="fas fa-clipboard"></i> Session Worksheets</h3>
-                        <ul class="material-list">
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Team Dysfunctions Assessment</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Strategic Planning Worksheet</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Leadership Self-Evaluation</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Action Planning Template</a></li>
-                        </ul>
-                    </div>
-                    <div class="material-item">
-                        <h3><i class="fas fa-book"></i> Reference Materials</h3>
-                        <ul class="material-list">
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> AES Core Values & Mission</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Current Strategic Plan</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Financial Performance Dashboard</a></li>
-                            <li><a href="#" class="material-link"><i class="fas fa-download"></i> Office Directory & Contacts</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <h2><i class="fas fa-lightbulb"></i> Conference Tips & Best Practices</h2>
-                <div class="tips-grid">
-                    <div class="tip-item">
-                        <h3><i class="fas fa-star"></i> Maximize Your Experience</h3>
-                        <ul>
-                            <li>Use the star button to mark sessions you're most interested in</li>
-                            <li>Take notes during sessions using the notes feature</li>
-                            <li>Download materials before sessions for better preparation</li>
-                            <li>Network during breaks and meals</li>
-                        </ul>
-                    </div>
-                    <div class="tip-item">
-                        <h3><i class="fas fa-mobile-alt"></i> Using This Agenda</h3>
-                        <ul>
-                            <li>Search for specific topics using the search box (top left)</li>
-                            <li>Use keyboard shortcuts: Ctrl+1-4 for tabs, Ctrl+F for search</li>
-                            <li>Your notes and favorites are saved automatically</li>
-                            <li>Materials can be downloaded directly from each session</li>
-                        </ul>
-                    </div>
-                    <div class="tip-item">
-                        <h3><i class="fas fa-users"></i> Networking Success</h3>
-                        <ul>
-                            <li>Come prepared with business cards</li>
-                            <li>Use the contact information provided to connect</li>
-                            <li>Share your experience on social media with #AESFLC2025</li>
-                            <li>Follow up after the conference to maintain connections</li>
-                        </ul>
-                    </div>
-                    <div class="tip-item">
-                        <h3><i class="fas fa-clock"></i> Time Management</h3>
-                        <ul>
-                            <li>Arrive 5 minutes early for each session</li>
-                            <li>Plan bathroom and coffee breaks between sessions</li>
-                            <li>Use personal time for networking or rest</li>
-                            <li>Set reminders for important sessions</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-            <div id="wednesday" class="content-section section-wednesday">
-            <div class="day-header-section">
-                <h2><i class="fas fa-calendar-day"></i> Wednesday, October 15<sup>th</sup>, 2025</h2>
+                <p class="hero-description">Building Unity, Strategic Alignment, and Trust Across All Offices</p>
             </div>
+        </section>
 
-            <div class="schedule">
-                <div class="time-slot" data-session="checkin">
-                    <div class="time">11:00am</div>
-                    <div class="event">
-                        <div class="session-header">
-                            <h3>Check-in</h3>
-                            <div class="session-actions">
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Conference Overview Section -->
+            <section class="section conference-overview">
+                <h2><i class="fas fa-info-circle"></i> Conference Overview</h2>
+                <div class="conference-info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-users"></i> Attendees</h3>
+                        <p><strong>David Mobambola</strong> - AES P&A Leadership Team</p>
+                        <p><strong>Katie Bennett</strong> - AES P&A Leadership Team</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-bullseye"></i> Desired Outcomes</h3>
+                        <p>Build Unity Across 4 Offices</p>
+                        <p>Establish Strategic Alignment</p>
+                        <p>Build Trust, Collaboration & Accountability</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-wifi"></i> Logistics</h3>
+                        <p><strong>Venue:</strong> Oak Bay Beach Hotel</p>
+                        <p><strong>WiFi:</strong> Conference details at check-in</p>
+                        <p><strong>Parking:</strong> Complimentary valet parking</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flashcards Container -->
+            <section class="flashcards-section">
+                <h2><i class="fas fa-calendar-alt"></i> Conference Schedule</h2>
+                <div class="flashcards-grid" id="flashcards-grid">
+                    <!-- Wednesday Cards -->
+                    <div class="flashcard" data-session="checkin" data-day="wednesday">
+                        <div class="flashcard-header">
+                            <div class="session-time">11:00 AM</div>
+                            <div class="session-day">Wednesday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Check-in & Welcome</h3>
+                            <p>Welcome and registration for all conference participants. Badge pickup, conference materials distribution, and networking with colleagues.</p>
+                            <div class="flashcard-actions">
                                 <button class="action-btn favorite-btn" title="Add to Favorites">
                                     <i class="fas fa-star"></i>
                                 </button>
@@ -288,29 +114,17 @@
                                 </button>
                             </div>
                         </div>
-                        <p><strong>Purpose:</strong> Welcome and registration for all conference participants</p>
-                        <p><strong>Activities:</strong> Badge pickup, conference materials distribution, networking with colleagues</p>
-                        <p><strong>Duration:</strong> 30 minutes</p>
-                        <div class="session-materials">
-                            <h4><i class="fas fa-download"></i> Materials:</h4>
-                            <ul>
-                                <li><a href="#" class="material-link"><i class="fas fa-file"></i> Conference Welcome Packet</a></li>
-                                <li><a href="#" class="material-link"><i class="fas fa-map"></i> Hotel Map & Facilities Guide</a></li>
-                            </ul>
-                        </div>
-                        <div class="session-notes" style="display: none;">
-                            <textarea placeholder="Add your notes for this session..."></textarea>
-                            <button class="save-notes-btn">Save Notes</button>
-                        </div>
                     </div>
-                </div>
 
-                <div class="time-slot" data-session="introductions">
-                    <div class="time">11:30am</div>
-                    <div class="event">
-                        <div class="session-header">
-                            <h3>Introductions and Working Lunch</h3>
-                            <div class="session-actions">
+                    <div class="flashcard" data-session="introductions" data-day="wednesday">
+                        <div class="flashcard-header">
+                            <div class="session-time">11:30 AM</div>
+                            <div class="session-day">Wednesday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Introductions & Working Lunch</h3>
+                            <p>Facilitate team introductions and build relationships while enjoying lunch. Personal introductions, icebreaker activities, and discussion of conference objectives.</p>
+                            <div class="flashcard-actions">
                                 <button class="action-btn favorite-btn" title="Add to Favorites">
                                     <i class="fas fa-star"></i>
                                 </button>
@@ -319,329 +133,317 @@
                                 </button>
                             </div>
                         </div>
-                        <p><strong>Purpose:</strong> Facilitate team introductions and build relationships while enjoying lunch</p>
-                        <p><strong>Activities:</strong> Personal introductions, icebreaker activities, discussion of conference objectives</p>
-                        <p><strong>Format:</strong> Casual networking with guided introductions</p>
-                        <div class="session-materials">
-                            <h4><i class="fas fa-download"></i> Materials:</h4>
-                            <ul>
-                                <li><a href="#" class="material-link"><i class="fas fa-file"></i> Icebreaker Activities Guide</a></li>
-                                <li><a href="#" class="material-link"><i class="fas fa-users"></i> Attendee Contact List Template</a></li>
-                            </ul>
-                        </div>
-                        <div class="session-notes" style="display: none;">
-                            <textarea placeholder="Add your notes for this session..."></textarea>
-                            <button class="save-notes-btn">Save Notes</button>
-                        </div>
                     </div>
-                </div>
 
-                <div class="time-slot major">
-                    <div class="time">1:00pm</div>
-                    <div class="event">
-                        <h3>Financials</h3>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>1. Factual Financial Review</h4>
-                                <p><strong>Objective:</strong> Create transparency and accountability around financial performance</p>
-                                <p><strong>Format:</strong> Open dialogue and Q&A session about current financial status</p>
-                                <p><strong>Outcome:</strong> Increased awareness and ownership of financial metrics across all leadership levels</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>2. Review Overall Company Performance</h4>
-                                <p><strong>Scope:</strong> Comprehensive analysis of company-wide financial performance</p>
-                                <p><strong>Breakdown:</strong> Individual office performance metrics and comparative analysis</p>
-                                <p><strong>Focus:</strong> Identifying trends, strengths, and areas for improvement</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>3. Forward Looking Tools</h4>
-                                <p><strong>Tools Covered:</strong> Revenue forecasting models, cash flow projections, P&L analysis</p>
-                                <p><strong>Pipeline Review:</strong> Current and projected business opportunities</p>
-                                <p><strong>Purpose:</strong> Strategic planning and resource allocation for future growth</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>4. Shareholder Ownership</h4>
-                                <p><strong>Review:</strong> Current shareholder structure and ownership percentages</p>
-                                <p><strong>Discussion:</strong> New shareholder opportunities and existing shareholder updates</p>
-                                <p><strong>Financial Impact:</strong> Overall earnings distribution and shareholder value creation</p>
+                    <div class="flashcard major" data-session="financials" data-day="wednesday">
+                        <div class="flashcard-header">
+                            <div class="session-time">1:00 PM</div>
+                            <div class="session-day">Wednesday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Financial Review & Analysis</h3>
+                            <p>Comprehensive financial review including factual performance analysis, company-wide metrics, forward-looking tools, and shareholder ownership discussion.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="time-slot">
-                    <div class="time">5:15pm</div>
-                    <div class="event">
-                        <h3>Personal Time</h3>
-                        <p>Free time for participants</p>
+                    <div class="flashcard" data-session="personal-time-wed" data-day="wednesday">
+                        <div class="flashcard-header">
+                            <div class="session-time">5:15 PM</div>
+                            <div class="session-day">Wednesday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Personal Time</h3>
+                            <p>Free time for participants to rest, network, or explore Victoria.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="dinner-wed" data-day="wednesday">
+                        <div class="flashcard-header">
+                            <div class="session-time">6:30 PM</div>
+                            <div class="session-day">Wednesday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Team Dinner</h3>
+                            <p>Group dinner at Vis-a-vis restaurant for networking and team building.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thursday Cards -->
+                    <div class="flashcard" data-session="breakfast-thu" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">7:15 AM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Breakfast</h3>
+                            <p>Morning meal to start the main conference day.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard major long-session" data-session="main-session" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">8:00 AM - 12:00 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>FLC 2025 Main Session</h3>
+                            <p>Team Review of 5 Dysfunctions, Team Trust Building, and Rockefeller Habits Book Review with One Page Strategic Plan development.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="lunch-thu" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">12:00 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Lunch Break</h3>
+                            <p>Midday meal and networking opportunity.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="commitments-review" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">12:45 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Review Commitments & Initiatives</h3>
+                            <p>Comprehensive review of commitments from Spring Leadership Conference 2025, including performance assessment, deliverables review, and gap analysis.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="personal-time-thu" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">2:30 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Personal Time</h3>
+                            <p>Free time for participants before the team activity.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="team-activity" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">4:00 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Team Activity</h3>
+                            <p>Clue Solvers "After the Goldrush" - Interactive mystery-solving adventure in Victoria to strengthen team bonds through collaborative problem-solving.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="dinner-thu" data-day="thursday">
+                        <div class="flashcard-header">
+                            <div class="session-time">6:30 PM</div>
+                            <div class="session-day">Thursday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Team Dinner</h3>
+                            <p>Group dinner at Bard and Banker restaurant following the team activity.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Friday Cards -->
+                    <div class="flashcard" data-session="breakfast-fri" data-day="friday">
+                        <div class="flashcard-header">
+                            <div class="session-time">7:15 AM</div>
+                            <div class="session-day">Friday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Breakfast</h3>
+                            <p>Morning meal to start the final conference day.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard major" data-session="strategic-planning" data-day="friday">
+                        <div class="flashcard-header">
+                            <div class="session-time">8:00 AM - 12:00 PM</div>
+                            <div class="session-day">Friday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Strategic Planning Session</h3>
+                            <p>Priority setting for 2026, including top 5 and top 1 priorities, plus Q1 & Q2 2026 action planning with specific initiatives and ownership.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="lunch-fri" data-day="friday">
+                        <div class="flashcard-header">
+                            <div class="session-time">12:00 PM</div>
+                            <div class="session-day">Friday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Lunch Break</h3>
+                            <p>Final lunch together before the closing session.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard" data-session="final-session" data-day="friday">
+                        <div class="flashcard-header">
+                            <div class="session-time">12:45 PM</div>
+                            <div class="session-day">Friday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Final Session</h3>
+                            <p>Leadership effectiveness evaluation and organizational theme setting for the next 6 months.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flashcard end-conference" data-session="conference-close" data-day="friday">
+                        <div class="flashcard-header">
+                            <div class="session-time">2:30 PM</div>
+                            <div class="session-day">Friday</div>
+                        </div>
+                        <div class="flashcard-content">
+                            <h3>Conference Close & Departure</h3>
+                            <p>Wrap-up and departure - end of the Fall Leadership Conference.</p>
+                            <div class="flashcard-actions">
+                                <button class="action-btn favorite-btn" title="Add to Favorites">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="action-btn notes-btn" title="Add Notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="time-slot">
-                    <div class="time">6:30pm</div>
-                    <div class="event">
-                        <h3>Team Dinner</h3>
-                        <p><strong>Location:</strong> Vis-a-vis</p>
-                    </div>
-                </div>
-            </div>
+            </section>
         </div>
 
-            <div id="thursday" class="content-section section-thursday">
-            <div class="day-header-section">
-                <h2><i class="fas fa-calendar-day"></i> Thursday, October 16<sup>th</sup>, 2025</h2>
-            </div>
-
-            <div class="schedule">
-                <div class="time-slot">
-                    <div class="time">7:15-8:00am</div>
-                    <div class="event">
-                        <h3>Breakfast</h3>
-                        <p>Breakfast opens as of 7:15</p>
-                    </div>
+        <!-- Floating Detail Window -->
+        <div id="detailModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle"></h2>
+                    <button class="modal-close" id="modalClose">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-
-                <div class="time-slot major long-session">
-                    <div class="time">8:00am - 12:00pm</div>
-                    <div class="event">
-                        <h3>FLC 2025 Main Session</h3>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>1. Team Review of 5 Dysfunctions</h4>
-                                <p><strong>Framework:</strong> Based on Patrick Lencioni's "Five Dysfunctions of a Team" model</p>
-                                <p><strong>Purpose:</strong> Assess team effectiveness and identify areas for improvement</p>
-                                <div class="sub-section">
-                                    <h5>The Five Dysfunctions Framework:</h5>
-                                    <ul class="sub-items">
-                                        <li><strong>Absence of Trust:</strong> Team members don't feel comfortable being vulnerable</li>
-                                        <li><strong>Fear of Conflict:</strong> Avoiding productive conflict leads to artificial harmony</li>
-                                        <li><strong>Lack of Commitment:</strong> Without buy-in, team members don't commit to decisions</li>
-                                        <li><strong>Avoidance of Accountability:</strong> Team members avoid calling out poor performance</li>
-                                        <li><strong>Inattention to Results:</strong> Team members focus on individual goals over team success</li>
-                                    </ul>
-                                </div>
-                                <ul class="sub-items">
-                                    <li><strong>Assessment:</strong> How are we performing on each of the 5 dysfunctions?</li>
-                                    <li><strong>Cross-Company Unity:</strong> Evaluate synergy and collaboration across all offices</li>
-                                    <li><strong>Recognition:</strong> Acknowledge leaders who excel at fostering collaboration and breaking down silos</li>
-                                    <li><strong>Progress Review:</strong> What changes have been implemented since the last assessment?</li>
-                                </ul>
-                            </div>
-                            <div class="detail-item">
-                                <h4>2. Team Trust Building</h4>
-                                <p><strong>Purpose:</strong> Strengthen interpersonal relationships and psychological safety within the team</p>
-                                <p><strong>Activities:</strong> Trust-building exercises, vulnerability-based leadership discussions, team bonding activities</p>
-                                <p><strong>Focus:</strong> Creating an environment where team members feel safe to take risks and be authentic</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>3. Rockefeller Habits Book Review</h4>
-                                <p><strong>Framework:</strong> Based on Verne Harnish's "Scaling Up" methodology for business growth</p>
-                                <p><strong>Purpose:</strong> Develop a clear 1-year strategic plan and establish organizational themes</p>
-                                <div class="sub-section">
-                                    <h5>a. 3 Key Concepts: Priorities, Data & Rhythm</h5>
-                                    <ul class="sub-items">
-                                        <li><strong>Priorities:</strong> Focus on the One Page Strategic Plan (OPSP) - a single-page document that captures the company's vision, mission, values, and key objectives</li>
-                                        <li><strong>Data:</strong> Establish key performance indicators (KPIs) and ensure data is collected frequently enough to drive actionable insights and decision-making</li>
-                                        <li><strong>Rhythm:</strong> Implement consistent meeting cadence - daily 15-minute huddles, weekly team meetings, monthly management reviews, quarterly planning sessions, and annual strategic planning</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-section">
-                                    <h5>b. Key Categories (The 9 Essential Habits)</h5>
-                                    <ol class="sub-items numbered">
-                                        <li><strong>Mastering the right people, doing the right things, right:</strong> Hiring, training, and aligning people with company values and objectives</li>
-                                        <li><strong>Mastering the one-page strategic plan:</strong> Creating and maintaining a clear, concise strategic document that guides all decisions</li>
-                                        <li><strong>Mastering the use of core values:</strong> Living and breathing company values in daily operations and decision-making</li>
-                                        <li><strong>Mastering organizational alignment and focus:</strong> Cascading strategy down through all levels of the organization</li>
-                                        <li><strong>Mastering the quarterly theme:</strong> Setting quarterly priorities that drive focused execution</li>
-                                        <li><strong>Mastering customer and employee feedback:</strong> Regular collection and action on feedback from key stakeholders</li>
-                                        <li><strong>Mastering the daily and weekly meetings:</strong> Structured, efficient meetings that drive accountability and progress</li>
-                                        <li><strong>Mastering the brand promise:</strong> Delivering consistent value that differentiates the company in the market</li>
-                                        <li><strong>Mastering cash flow:</strong> Understanding and optimizing cash flow for sustainable growth</li>
-                                    </ol>
-                                </div>
-                                <div class="sub-section">
-                                    <h5>c. OPSP (One Page Strategic Plan)</h5>
-                                    <p><strong>Purpose:</strong> Create a single-page strategic document that aligns the entire organization</p>
-                                    <ul class="sub-items">
-                                        <li><strong>Template Review:</strong> Examine OPSP structure including vision, mission, values, key metrics, and strategic priorities</li>
-                                        <li><strong>Cascading Implementation:</strong> Create OPSP for AES corporate level, then adapt for each office location, then customize for each Practice Area (P&A)</li>
-                                        <li><strong>Alignment Focus:</strong> Ensure all levels of the organization are aligned with corporate objectives</li>
-                                    </ul>
-                                </div>
-                                <div class="sub-section">
-                                    <h5>d. Deep Dive Session</h5>
-                                    <p><strong>Focus:</strong> "Mastering the right people, doing the right things, right"</p>
-                                    <ul class="sub-items">
-                                        <li><strong>Right People:</strong> Hiring criteria, cultural fit assessment, talent development programs</li>
-                                        <li><strong>Right Things:</strong> Strategic priority setting, resource allocation, and focus areas</li>
-                                        <li><strong>Right Way:</strong> Operational excellence, quality standards, and execution methodologies</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-body" id="modalBody">
                 </div>
-
-                <div class="time-slot">
-                    <div class="time">12:00-12:45pm</div>
-                    <div class="event">
-                        <h3>Lunch</h3>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="modalFavorite">
+                        <i class="fas fa-star"></i> Add to Favorites
+                    </button>
+                    <button class="btn btn-secondary" id="modalNotes">
+                        <i class="fas fa-sticky-note"></i> Add Notes
+                    </button>
                 </div>
-
-                <div class="time-slot">
-                    <div class="time">12:45-2:30pm</div>
-                    <div class="event">
-                        <h3>Review Commitments & Initiatives</h3>
-                        <p><strong>Scope:</strong> Comprehensive review of commitments made during Spring Leadership Conference 2025</p>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>a. Performance Assessment: How did we do?</h4>
-                                <p><strong>Purpose:</strong> Evaluate overall performance against commitments and goals</p>
-                                <p><strong>Method:</strong> Data-driven analysis of progress metrics and qualitative feedback</p>
-                                <p><strong>Outcome:</strong> Honest assessment of achievements and areas needing attention</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>b. Deliverables Review: What has been delivered?</h4>
-                                <p><strong>Focus:</strong> Document and celebrate completed initiatives and milestones</p>
-                                <p><strong>Format:</strong> Showcase of achievements, completed projects, and implemented changes</p>
-                                <p><strong>Recognition:</strong> Acknowledge teams and individuals who delivered on commitments</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>c. Gap Analysis: What hasn't been delivered?</h4>
-                                <p><strong>Purpose:</strong> Identify and analyze unmet commitments or delayed initiatives</p>
-                                <p><strong>Analysis:</strong> Root cause analysis of why certain commitments weren't fulfilled</p>
-                                <p><strong>Action Planning:</strong> Develop strategies to address gaps and prevent future delays</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>d. Accountability Framework: Short vs Long Term Goals</h4>
-                                <p><strong>Reality Check:</strong> Honest discussion about the difference between aspirational and achievable goals</p>
-                                <p><strong>Time Horizons:</strong> Distinguish between immediate wins and long-term strategic objectives</p>
-                                <p><strong>Accountability:</strong> Establish clear ownership and responsibility for future commitments</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>e. Learning and Adaptation: What are we learning?</h4>
-                                <p><strong>Focus:</strong> Extract key insights and lessons learned from the past period</p>
-                                <p><strong>Process Improvement:</strong> Identify what worked well and what needs to change</p>
-                                <p><strong>Future Application:</strong> Apply learnings to improve future planning and execution</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="time-slot">
-                    <div class="time">2:30-4:00pm</div>
-                    <div class="event">
-                        <h3>Personal Time</h3>
-                    </div>
-                </div>
-
-                <div class="time-slot">
-                    <div class="time">4:00pm</div>
-                    <div class="event">
-                        <h3>Team Activity</h3>
-                        <p><strong>Location:</strong> Meet in hotel lobby to travel into Victoria</p>
-                        <p><strong>Activity:</strong> Clue Solvers "After the Goldrush"</p>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>Team Building Experience</h4>
-                                <p><strong>Purpose:</strong> Strengthen team bonds through collaborative problem-solving</p>
-                                <p><strong>Format:</strong> Interactive mystery-solving adventure set in Victoria's historic context</p>
-                                <p><strong>Benefits:</strong> Develop communication, critical thinking, and teamwork skills in a fun, engaging environment</p>
-                                <p><strong>Theme:</strong> "After the Goldrush" - explores Victoria's rich history while challenging teams to work together</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="time-slot">
-                    <div class="time">6:30pm</div>
-                    <div class="event">
-                        <h3>Team Dinner</h3>
-                        <p><strong>Location:</strong> Bard and Banker</p>
-                        <p><em>Meet at the restaurant after the activity</em></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-            <div id="friday" class="content-section section-friday">
-            <div class="day-header-section">
-                <h2><i class="fas fa-calendar-day"></i> Friday, October 17<sup>th</sup>, 2025</h2>
-            </div>
-
-            <div class="schedule">
-                <div class="time-slot">
-                    <div class="time">7:15am</div>
-                    <div class="event">
-                        <h3>Breakfast</h3>
-                        <p>Breakfast opens as of 7:15</p>
-                    </div>
-                </div>
-
-                <div class="time-slot major">
-                    <div class="time">8:00am - 12:00pm</div>
-                    <div class="event">
-                        <h3>Strategic Planning Session</h3>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>1. Priority Setting: Top 5 and Top 1 of 5 Priorities for 2026</h4>
-                                <p><strong>Purpose:</strong> Establish clear strategic focus for the upcoming year</p>
-                                <p><strong>Process:</strong> Collaborative discussion to identify and prioritize the most critical initiatives</p>
-                                <p><strong>Outcome:</strong> Consensus on the top 5 strategic priorities, with clear identification of the #1 priority that will drive all other activities</p>
-                                <p><strong>Focus Areas:</strong> Revenue growth, operational excellence, market expansion, talent development, and innovation</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>2. Action Planning: Q1 2026 and Q2 2026 Actions</h4>
-                                <p><strong>Purpose:</strong> Translate strategic priorities into specific, actionable initiatives</p>
-                                <p><strong>Process:</strong> Break down annual priorities into quarterly milestones and specific actions</p>
-                                <p><strong>Ownership:</strong> Assign clear accountability for each action item and establish success metrics</p>
-                                <p><strong>Timeline:</strong> Create detailed implementation schedules for the first two quarters of 2026</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="time-slot">
-                    <div class="time">12:00-12:45pm</div>
-                    <div class="event">
-                        <h3>Lunch</h3>
-                    </div>
-                </div>
-
-                <div class="time-slot">
-                    <div class="time">12:45-2:30pm</div>
-                    <div class="event">
-                        <h3>Final Session</h3>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <h4>1. Leadership Effectiveness: Doing the Right Things</h4>
-                                <p><strong>Purpose:</strong> Optimize leadership focus and effectiveness across all Practice Areas</p>
-                                <p><strong>Process:</strong> Individual self-evaluation of current activities against ideal and required activities</p>
-                                <p><strong>Analysis:</strong> Compare current time allocation with strategic priorities and goals</p>
-                                <p><strong>Action Planning:</strong> Identify specific changes needed to align activities with objectives for each Practice Area (P&A)</p>
-                                <p><strong>Outcome:</strong> Personal development plans for each leader to maximize their impact and effectiveness</p>
-                            </div>
-                            <div class="detail-item">
-                                <h4>2. Organizational Theme Setting</h4>
-                                <p><strong>Purpose:</strong> Establish a unifying theme that will guide the organization for the next 6 months</p>
-                                <p><strong>Process:</strong> Collaborative discussion to identify a theme that captures the organization's focus and energy</p>
-                                <p><strong>Criteria:</strong> Theme should be memorable, inspiring, and actionable across all levels</p>
-                                <p><strong>Implementation:</strong> Develop communication strategy to cascade the theme throughout the organization</p>
-                                <p><strong>Examples:</strong> "Excellence in Action," "Growth Through Innovation," "Building Bridges," etc.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="time-slot end-conference">
-                    <div class="time">2:30-2:45pm</div>
-                    <div class="event">
-                        <h3>Close FLC and Depart</h3>
-                        <p><strong>END OF FLC</strong></p>
-                    </div>
-                </div>
-            </div>
             </div>
         </div>
 
@@ -671,9 +473,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash/4.17.21/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
-    
-    <!-- Custom Scripts -->
+
     <script src="script.js"></script>
 </body>
 </html>
-
