@@ -361,13 +361,14 @@ body {
 }
 
 .modal-content {
-    background: white;
+    background: #ffffff;
     border-radius: 20px;
     max-width: 800px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    color: #000000;
 }
 
 .modal-header {
@@ -408,6 +409,7 @@ body {
     padding: 2rem;
     line-height: 1.7;
     background: #ffffff;
+    color: #000000;
 }
 
 .modal-body h3 {
@@ -433,7 +435,7 @@ body {
 
 .modal-body p {
     margin-bottom: 1rem;
-    color: #333333;
+    color: #000000;
     font-weight: 600;
 }
 
@@ -444,13 +446,32 @@ body {
 
 .modal-body li {
     margin-bottom: 0.5rem;
-    color: #444444;
+    color: #000000;
     font-weight: 600;
 }
 
 .modal-body strong {
     color: #000000;
     font-weight: 800;
+}
+
+/* Ensure all text in modal is visible */
+.modal-body * {
+    color: inherit;
+}
+
+.modal-body span {
+    color: #000000 !important;
+}
+
+.modal-body em {
+    color: #000000 !important;
+    font-style: italic;
+}
+
+.modal-body b {
+    color: #000000 !important;
+    font-weight: bold;
 }
 
 /* Modal time display styling */
@@ -460,12 +481,34 @@ body {
     border-radius: 8px !important;
     padding: 1rem !important;
     margin-bottom: 1.5rem !important;
+    color: #000000 !important;
 }
 
 .modal-body div[style*="margin-bottom: 1.5rem"] strong {
     color: #0066cc !important;
     font-weight: 800 !important;
     font-size: 1.1rem !important;
+}
+
+.modal-body div[style*="margin-bottom: 1.5rem"] * {
+    color: #000000 !important;
+}
+
+/* Global modal text visibility override */
+.modal-body, .modal-body *:not(h3):not(h4):not(h5) {
+    color: #000000 !important;
+}
+
+.modal-body h3 {
+    color: #0066cc !important;
+}
+
+.modal-body h4 {
+    color: #009900 !important;
+}
+
+.modal-body h5 {
+    color: #0066cc !important;
 }
 
 .modal-footer {
