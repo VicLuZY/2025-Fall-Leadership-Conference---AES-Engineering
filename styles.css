@@ -78,14 +78,12 @@ body {
     color: white;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
     padding: 0.5rem 1rem;
     border-radius: 6px;
 }
 
 .header-nav a:hover {
     background: rgba(255,255,255,0.2);
-    transform: translateY(-1px);
 }
 
 /* Conference Hero Section */
@@ -223,15 +221,16 @@ body {
     border-radius: 16px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     overflow: hidden;
-    transition: all 0.3s ease;
     cursor: pointer;
     border: 2px solid transparent;
     position: relative;
-    display: block;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    min-height: 200px !important;
 }
 
 .flashcard:hover {
-    transform: translateY(-8px);
     box-shadow: 0 12px 30px rgba(0,0,0,0.2);
     border-color: var(--aes-blue);
 }
@@ -323,7 +322,6 @@ body {
     padding: 0.5rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
     font-size: 0.9rem;
     width: 40px;
     height: 40px;
@@ -335,7 +333,6 @@ body {
 .action-btn:hover {
     background: var(--aes-blue);
     color: white;
-    transform: scale(1.1);
 }
 
 .action-btn.favorited {
@@ -361,7 +358,6 @@ body {
 
 .modal-overlay.active {
     display: flex;
-    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -372,7 +368,6 @@ body {
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: slideIn 0.3s ease;
 }
 
 .modal-header {
@@ -554,22 +549,7 @@ body {
     opacity: 1;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideIn {
-    from { 
-        opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
+/* Animations - DISABLED */
 
 /* Search Container Styling - Bootstrap Compatible */
 .search-container {

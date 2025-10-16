@@ -371,8 +371,13 @@ class ConferenceApp {
             await this.initializeLibraries();
             this.setupEventListeners();
             this.loadPersistedData();
-            this.setupAnimations();
             this.ensureCardsVisible();
+            
+            // Double-check cards are visible after a short delay
+            setTimeout(() => {
+                this.ensureCardsVisible();
+            }, 500);
+            
             this.showWelcomeMessage();
         } catch (error) {
             console.error('Failed to initialize application:', error);
@@ -381,15 +386,6 @@ class ConferenceApp {
     }
     
     async initializeLibraries() {
-        // Initialize AOS (Animate On Scroll)
-        if (typeof AOS !== 'undefined') {
-            AOS.init({
-                duration: AppConfig.animationDuration,
-                once: true,
-                offset: 100
-            });
-        }
-        
         // Initialize Bootstrap tooltips
         if (typeof bootstrap !== 'undefined') {
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -785,32 +781,41 @@ class ConferenceApp {
         }
     }
     
-    // Setup animations using AOS library
+    // Setup animations using AOS library - DISABLED
     setupAnimations() {
-        // Add AOS attributes to elements
-        const animateElements = document.querySelectorAll('.flashcard, .info-card');
-        animateElements.forEach((element, index) => {
-            element.setAttribute('data-aos', 'fade-up');
-            element.setAttribute('data-aos-delay', (index * 50).toString());
-        });
-        
-        // Refresh AOS if available
-        if (typeof AOS !== 'undefined') {
-            AOS.refresh();
-        }
+        // Animations disabled to prevent hiding issues
+        return;
     }
     
     // Ensure all cards are visible on initialization
     ensureCardsVisible() {
         const allCards = document.querySelectorAll('.flashcard');
-        allCards.forEach(card => {
+        console.log('Found', allCards.length, 'flashcards');
+        
+        allCards.forEach((card, index) => {
+            console.log('Setting card', index, 'to visible');
             card.style.display = 'block';
+            card.style.visibility = 'visible';
+            card.style.opacity = '1';
             card.classList.remove('search-highlight');
+            
+            // Force visibility with important styles
+            card.style.setProperty('display', 'block', 'important');
+            card.style.setProperty('visibility', 'visible', 'important');
+            card.style.setProperty('opacity', '1', 'important');
         });
         
         // Clear any search input
         if (this.searchInput) {
             this.searchInput.value = '';
+        }
+        
+        // Also force the grid container to be visible
+        const grid = document.getElementById('flashcards-grid');
+        if (grid) {
+            grid.style.display = 'grid';
+            grid.style.visibility = 'visible';
+            grid.style.opacity = '1';
         }
     }
     
@@ -836,10 +841,8 @@ class ConferenceApp {
     // Setup responsive features
     setupResponsiveFeatures() {
         window.addEventListener('resize', () => {
-            // Refresh AOS on resize
-            if (typeof AOS !== 'undefined') {
-                AOS.refresh();
-            }
+            // No animations to refresh
+            return;
         });
     }
     
